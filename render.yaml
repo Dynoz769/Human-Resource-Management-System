@@ -5,12 +5,22 @@ services:
     plan: free
     region: frankfurt
     buildCommand: cd server && npm install
-    startCommand: cd server && npm start
+    startCommand: node server/src/server.js
     envVars:
       - key: JWT_SECRET
         generateValue: true
       - key: NODE_ENV
         value: production
+      - key: DB_HOST
+        value: localhost
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        value: peoplehub
+      - key: DB_USER
+        value: peoplehub
+      - key: DB_PASSWORD
+        value: Dynoz769
     healthCheckPath: /api/health
     autoDeploy: true
 
@@ -20,7 +30,7 @@ services:
     plan: free
     region: frankfurt
     buildCommand: cd client && npm install && npm run build
-    startCommand: cd client && npx serve -s dist -l 3000
+    startCommand: npx serve -s client/dist -l 3000
     envVars:
       - key: VITE_API_URL
         value: https://peoplehub-server.onrender.com/api
