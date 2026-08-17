@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: peoplehub-server
+    plan: free
+    region: frankfurt
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+  - type: web
+    name: peoplehub-client
+    plan: free
+    region: frankfurt
+    buildCommand: cd client && npm install && npm run build
+    startCommand: cd client && npx serve -s dist -l 3000
+    envVars:
+      - key: VITE_API_URL
+        value: https://peoplehub-server.onrender.com/api
+    autoDeploy: true
