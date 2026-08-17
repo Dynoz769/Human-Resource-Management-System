@@ -1,6 +1,7 @@
 services:
   - type: web
     name: peoplehub-server
+    runtime: node
     plan: free
     region: frankfurt
     buildCommand: cd server && npm install
@@ -15,6 +16,7 @@ services:
 
   - type: web
     name: peoplehub-client
+    runtime: node
     plan: free
     region: frankfurt
     buildCommand: cd client && npm install && npm run build
