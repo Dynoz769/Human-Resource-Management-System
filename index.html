@@ -1,0 +1,2437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PeopleHub HRMS v4 – ALL Features</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+                },
+            },
+        };
+    </script>
+    <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&family=Roboto+Flex:opsz,wght@8..144,400..700&display=swap" rel="stylesheet" />
+    <style>
+        /* --- Base Styles & Dark Mode (same as before) --- */
+        * { -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; font-family: "Roboto", ui-sans-serif, system-ui, sans-serif; background: #F3F1F7; -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
+        .dark body { background: #1C1B1F; }
+        #root { min-height: 100vh; }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #C9C5D0; border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+        ::-webkit-scrollbar-thumb:hover { background: #AEA9B6; background-clip: padding-box; }
+        .dark ::-webkit-scrollbar-thumb { background: #49454F; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #5F5B67; }
+        h1,h2,h3,.g-title { letter-spacing: -0.01em; }
+        input:focus, select:focus, textarea:focus { outline: none; }
+        .m3-tap { transition: background-color .15s ease, transform .1s ease, box-shadow .15s ease; }
+        .m3-tap:active { transform: scale(0.98); }
+
+        /* Dark mode overrides */
+        .dark .bg-\[\#FFFBFE\] { background-color: #2C2A30 !important; }
+        .dark .bg-\[\#F3F1F7\] { background-color: #1C1B1F !important; }
+        .dark .bg-\[\#ECE6F0\] { background-color: #35333A !important; }
+        .dark .bg-\[\#ECEAF0\] { background-color: #35333A !important; }
+        .dark .bg-\[\#E3E1E6\] { background-color: #3D3B43 !important; }
+        .dark .bg-\[\#D3E3FD\] { background-color: #1A3A6A !important; }
+        .dark .text-\[\#1D1B20\] { color: #E6E1E9 !important; }
+        .dark .text-\[\#49454F\] { color: #C9C5D0 !important; }
+        .dark .text-\[\#79747E\] { color: #A9A5B0 !important; }
+        .dark .text-\[\#938F99\] { color: #88849A !important; }
+        .dark .border-\[\#E3E1E6\] { border-color: #3D3B43 !important; }
+        .dark .border-\[\#ECEAF0\] { border-color: #35333A !important; }
+        .dark .border-\[\#D6D0DA\] { border-color: #3D3B43 !important; }
+        .dark .ring-white { ring-color: #2C2A30 !important; }
+        .dark .shadow-\[0_1px_2px_rgba\(0\,0\,0\,0.06\)\,0_1px_3px_1px_rgba\(0\,0\,0\,0.05\)\] { box-shadow: 0 1px 2px rgba(255,255,255,0.04), 0 1px 3px 1px rgba(255,255,255,0.03) !important; }
+        .dark .shadow-\[0_1px_2px_rgba\(0\,0\,0\,0.06\)\,0_2px_8px_rgba\(0\,0\,0\,0.06\)\] { box-shadow: 0 1px 2px rgba(255,255,255,0.04), 0 2px 8px rgba(255,255,255,0.04) !important; }
+        .dark .shadow-\[0_1px_2px_rgba\(0\,0\,0\,0.08\)\,0_1px_3px_1px_rgba\(0\,0\,0\,0.06\)\] { box-shadow: 0 1px 2px rgba(255,255,255,0.04), 0 1px 3px 1px rgba(255,255,255,0.03) !important; }
+        .dark .shadow-xl { box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
+        .dark .shadow-2xl { box-shadow: 0 12px 40px rgba(0,0,0,0.6) !important; }
+        .dark .bg-emerald-100 { background-color: #1A4A3A !important; }
+        .dark .bg-emerald-100.text-emerald-700 { color: #7AE0B0 !important; }
+        .dark .bg-amber-100 { background-color: #4A3A1A !important; }
+        .dark .bg-amber-100.text-amber-700 { color: #F5C842 !important; }
+        .dark .bg-rose-100 { background-color: #4A1A1A !important; }
+        .dark .bg-rose-100.text-rose-700 { color: #F87171 !important; }
+        .dark .bg-\[\#E3E1E6\].text-\[\#49454F\] { background-color: #3D3B43 !important; color: #A9A5B0 !important; }
+        .dark .bg-\[\#ECEAF0\].text-\[\#938F99\] { background-color: #3D3B43 !important; color: #88849A !important; }
+        .dark .bg-\[\#E3E1E6\].text-\[\#79747E\] { background-color: #3D3B43 !important; color: #A9A5B0 !important; }
+        .dark .bg-\[\#ECE6F0\].text-\[\#0B57D0\] { background-color: #2C2A30 !important; color: #7BC0FF !important; }
+        .dark .bg-blue-500 { background-color: #1A4A8A !important; }
+        .dark .bg-orange-500 { background-color: #8A4A1A !important; }
+        .dark .bg-emerald-500 { background-color: #1A6A3A !important; }
+        .dark .bg-purple-500 { background-color: #4A1A7A !important; }
+        .dark .bg-rose-50 { background-color: #3A1A1A !important; }
+        .dark .bg-emerald-50 { background-color: #1A3A2A !important; }
+        .dark .text-rose-600 { color: #F87171 !important; }
+        .dark .text-emerald-600 { color: #7AE0B0 !important; }
+        .dark .text-amber-500 { color: #F5C842 !important; }
+        .dark .bg-\[\#0B57D0\] { background-color: #1A5A9A !important; }
+        .dark .bg-\[\#0B57D0\]:hover { background-color: #2A6AAA !important; }
+        .dark .bg-\[\#0842A0\] { background-color: #1A4A8A !important; }
+        .dark .bg-emerald-600 { background-color: #1A6A3A !important; }
+        .dark .bg-emerald-600:hover { background-color: #2A7A4A !important; }
+        .dark .bg-purple-600 { background-color: #4A1A7A !important; }
+        .dark .bg-purple-600:hover { background-color: #5A2A8A !important; }
+        .dark .bg-fuchsia-500 { background-color: #6A1A7A !important; }
+        .dark .bg-pink-500 { background-color: #7A1A4A !important; }
+        .dark .bg-cyan-500 { background-color: #1A5A7A !important; }
+        .dark .bg-rose-500 { background-color: #7A1A2A !important; }
+        .dark .bg-teal-500 { background-color: #1A5A5A !important; }
+        .dark .bg-amber-500 { background-color: #7A4A1A !important; }
+        .dark .bg-lime-600 { background-color: #3A6A1A !important; }
+
+        /* Toasts, charts, sidebar collapse */
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+        .toast-enter { animation: slideUp 0.25s cubic-bezier(0.2,0,0,1) forwards; }
+        @keyframes fadeOut { from { opacity:1; transform:translateY(0) scale(1); } to { opacity:0; transform:translateY(-10px) scale(0.96); } }
+        .toast-exit { animation: fadeOut 0.2s cubic-bezier(0.4,0,1,1) forwards; }
+        .chart-bar { transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .sidebar-collapsed .w-64 { width: 72px !important; }
+        .sidebar-collapsed .w-64 .px-3, .sidebar-collapsed .w-64 .px-5, .sidebar-collapsed .w-64 .px-4 { padding-left:0.5rem !important; padding-right:0.5rem !important; }
+        .sidebar-collapsed .w-64 .pl-4 { padding-left:0.5rem !important; }
+        .sidebar-collapsed .w-64 .gap-3 { gap:0.5rem !important; }
+        .sidebar-collapsed .w-64 .flex-1>:not(.flex-shrink-0) { display:none !important; }
+        .sidebar-collapsed .w-64 .border-t { display:none !important; }
+        .sidebar-collapsed .w-64 .py-4 { padding-top:0.75rem !important; padding-bottom:0.75rem !important; }
+        .sidebar-collapsed .w-64 nav button { justify-content:center !important; padding-left:0 !important; padding-right:0 !important; }
+        .sidebar-collapsed .w-64 nav button span { display:none !important; }
+        .sidebar-collapsed .w-64 .flex.items-center.gap-3.px-3 { justify-content:center !important; }
+        .sidebar-collapsed .w-64 .flex.items-center.gap-3.px-3 div:last-child { display:none !important; }
+        .sidebar-collapsed .w-64 .border-b { display:none !important; }
+        .sidebar-collapsed .w-64 .w-10.h-10 { width:2.5rem !important; height:2.5rem !important; }
+        .sidebar-collapsed .w-64 .rounded-2xl { border-radius:0.75rem !important; }
+        .sidebar-collapsed .w-64 .pl-4.pr-4 { padding-left:0.25rem !important; padding-right:0.25rem !important; }
+        .sidebar-collapsed .w-64 .gap-3 { gap:0 !important; }
+        .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+        /* Print styles for PDF export */
+        @media print {
+            body * { visibility: hidden; }
+            .print-area, .print-area * { visibility: visible; }
+            .print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel" data-type="module" data-presets="react">
+        import React, { useState, useEffect, useCallback, useMemo, useReducer, useRef, createContext, useContext } from "https://esm.sh/react@18.2.0";
+        import ReactDOM from "https://esm.sh/react-dom@18.2.0/client";
+        import {
+            Shield, Users, Building2, Clock, Calendar, Briefcase, ClipboardCheck,
+            DollarSign, TrendingUp, LayoutGrid, Mail, Lock, Eye, EyeOff, LogOut,
+            Plus, Check, X, FileText, Upload, User, Search, Trash2, ThumbsUp,
+            ThumbsDown, Wallet, Award, PlusCircle, ArrowLeft, CalendarDays,
+            Moon, Sun, Bell, Download, Filter, ChevronLeft, ChevronRight, ChevronUp,
+            BarChart3, Megaphone, Info, AlertCircle, CheckCircle, FileSpreadsheet,
+            Home, Briefcase as BriefcaseIcon, UserPlus, MessageSquare, Star, Target,
+            BookOpen, Layers, Sparkles, Zap, Palette, RefreshCw, Globe, Printer,
+            Trophy, UsersRound, PieChart, ListChecks, CalendarCheck, BadgeCheck
+        } from "https://esm.sh/lucide-react@0.383.0?deps=react@18.2.0";
+
+        // ─── Translations ──────────────────────────────────────────────────────────
+        const TRANSLATIONS = {
+            en: {
+                welcome: "Welcome",
+                dashboard: "Dashboard",
+                employees: "Employees",
+                orgStructure: "Org Structure",
+                attendance: "Attendance",
+                leaveManagement: "Leave Management",
+                recruitment: "Recruitment",
+                onboarding: "Onboarding",
+                payroll: "Payroll",
+                performance: "Performance",
+                announcements: "Announcements",
+                myProfile: "My Profile",
+                leaveRequests: "Leave Requests",
+                payslips: "Payslips",
+                documents: "Documents",
+                analytics: "Analytics",
+                leaderboard: "Leaderboard",
+                calendar: "Calendar",
+                myTeam: "My Team",
+                pendingLeaves: "Pending Leave Requests",
+                signIn: "Sign In",
+                signOut: "Sign Out",
+                addEmployee: "Add Employee",
+                postJob: "Post Job",
+                processPayroll: "Process Payroll",
+                exportCSV: "Export CSV",
+                requestLeave: "Request Leave",
+                checkIn: "Check In",
+                checkInToday: "Checked in today",
+                noData: "No data available",
+                viewAll: "View all →",
+                saveChanges: "Save Changes",
+                // ... more keys
+            },
+            id: {
+                welcome: "Selamat Datang",
+                dashboard: "Dasbor",
+                employees: "Karyawan",
+                orgStructure: "Struktur Organisasi",
+                attendance: "Kehadiran",
+                leaveManagement: "Manajemen Cuti",
+                recruitment: "Rekrutmen",
+                onboarding: "Onboarding",
+                payroll: "Penggajian",
+                performance: "Kinerja",
+                announcements: "Pengumuman",
+                myProfile: "Profil Saya",
+                leaveRequests: "Permohonan Cuti",
+                payslips: "Slip Gaji",
+                documents: "Dokumen",
+                analytics: "Analitik",
+                leaderboard: "Papan Peringkat",
+                calendar: "Kalender",
+                myTeam: "Tim Saya",
+                pendingLeaves: "Cuti Tertunda",
+                signIn: "Masuk",
+                signOut: "Keluar",
+                addEmployee: "Tambah Karyawan",
+                postJob: "Buka Lowongan",
+                processPayroll: "Proses Penggajian",
+                exportCSV: "Ekspor CSV",
+                requestLeave: "Ajukan Cuti",
+                checkIn: "Absen Masuk",
+                checkInToday: "Sudah absen hari ini",
+                noData: "Tidak ada data",
+                viewAll: "Lihat semua →",
+                saveChanges: "Simpan Perubahan",
+            }
+        };
+
+        // ─── Context ──────────────────────────────────────────────────────────────
+        const AppContext = createContext();
+
+        function useApp() { return useContext(AppContext); }
+
+        // ─── Reducer ──────────────────────────────────────────────────────────────
+        const initialState = {
+            user: null,
+            employees: [],
+            leaveRequests: [],
+            jobs: [],
+            onboardingTasks: [],
+            payroll: [],
+            performance: [],
+            documents: [],
+            payslips: [],
+            attendanceWeek: [],
+            announcements: [],
+            notifications: [],
+            language: 'en',
+            points: 0,
+        };
+
+        function appReducer(state, action) {
+            switch (action.type) {
+                case 'SET_USER':
+                    return { ...state, user: action.payload };
+                case 'SET_EMPLOYEES':
+                    return { ...state, employees: action.payload };
+                case 'SET_LEAVE_REQUESTS':
+                    return { ...state, leaveRequests: action.payload };
+                case 'SET_JOBS':
+                    return { ...state, jobs: action.payload };
+                case 'SET_ONBOARDING':
+                    return { ...state, onboardingTasks: action.payload };
+                case 'SET_PAYROLL':
+                    return { ...state, payroll: action.payload };
+                case 'SET_ANNOUNCEMENTS':
+                    return { ...state, announcements: action.payload };
+                case 'SET_NOTIFICATIONS':
+                    return { ...state, notifications: action.payload };
+                case 'ADD_NOTIFICATION':
+                    return { ...state, notifications: [action.payload, ...state.notifications] };
+                case 'MARK_NOTIFICATION_READ':
+                    return { ...state, notifications: state.notifications.map(n => n.id === action.payload ? { ...n, read: true } : n) };
+                case 'CLEAR_NOTIFICATIONS':
+                    return { ...state, notifications: [] };
+                case 'SET_LANGUAGE':
+                    return { ...state, language: action.payload };
+                case 'ADD_POINTS':
+                    // Assuming employee points are updated via employees array, but we add a global point event log here.
+                    return { ...state, points: state.points + action.payload };
+                default:
+                    return state;
+            }
+        }
+
+        // ─── Initial Data ──────────────────────────────────────────────────────────
+        const DEPARTMENTS = ["Engineering", "Sales", "Marketing", "HR", "Finance", "ICT"];
+        const EMPLOYEE_COLORS = ["bg-[#0B57D0]", "bg-blue-500", "bg-emerald-500", "bg-orange-500", "bg-purple-500", "bg-cyan-500", "bg-rose-500", "bg-teal-500"];
+
+        function getInitialData() {
+            const employees = [
+                { id: 1, name: "John Doe", email: "admin@peoplehub.com", password: "admin123", role: "admin", department: "HR", status: "Active", joined: "2021-03-01", color: "bg-[#0B57D0]", leaveBalance: { annual: 12, sick: 10, personal: 3 }, points: 150 },
+                { id: 2, name: "Ali Mwanzuri", email: "ali.mwanzuri@peoplehub.com", password: "employee123", role: "employee", department: "ICT", status: "Active", joined: "2026-06-10", color: "bg-pink-500", leaveBalance: { annual: 8, sick: 10, personal: 2 }, points: 45 },
+                { id: 3, name: "Sarah Chen", email: "sarah.chen@peoplehub.com", password: "employee123", role: "employee", department: "Engineering", status: "Active", joined: "2022-01-14", color: "bg-blue-500", leaveBalance: { annual: 10, sick: 8, personal: 3 }, points: 120 },
+                { id: 4, name: "Michael Brown", email: "michael.brown@peoplehub.com", password: "employee123", role: "employee", department: "Sales", status: "Active", joined: "2020-09-22", color: "bg-emerald-500", leaveBalance: { annual: 9, sick: 10, personal: 2 }, points: 80 },
+                { id: 5, name: "Harper Martin", email: "harper.martin@peoplehub.com", password: "employee123", role: "employee", department: "Marketing", status: "Active", joined: "2021-11-05", color: "bg-orange-500", leaveBalance: { annual: 11, sick: 9, personal: 3 }, points: 95 },
+                { id: 6, name: "Emma Wilson", email: "emma.wilson@peoplehub.com", password: "employee123", role: "employee", department: "Finance", status: "Active", joined: "2019-07-19", color: "bg-purple-500", leaveBalance: { annual: 13, sick: 8, personal: 2 }, points: 60 },
+                { id: 7, name: "James Lee", email: "james.lee@peoplehub.com", password: "employee123", role: "employee", department: "Engineering", status: "Active", joined: "2023-02-27", color: "bg-cyan-500", leaveBalance: { annual: 10, sick: 10, personal: 3 }, points: 110 },
+                { id: 8, name: "Olivia Davis", email: "olivia.davis@peoplehub.com", password: "employee123", role: "employee", department: "HR", status: "Active", joined: "2022-06-13", color: "bg-rose-500", leaveBalance: { annual: 12, sick: 10, personal: 3 }, points: 70 },
+                { id: 9, name: "Noah Garcia", email: "noah.garcia@peoplehub.com", password: "employee123", role: "employee", department: "Sales", status: "Active", joined: "2018-04-02", color: "bg-teal-500", leaveBalance: { annual: 8, sick: 10, personal: 2 }, points: 140 },
+                { id: 10, name: "Sophia Martinez", email: "sophia.martinez@peoplehub.com", password: "employee123", role: "employee", department: "Engineering", status: "On Leave", joined: "2021-08-30", color: "bg-fuchsia-500", leaveBalance: { annual: 6, sick: 8, personal: 2 }, points: 30 },
+                { id: 11, name: "Liam Johnson", email: "liam.johnson@peoplehub.com", password: "employee123", role: "employee", department: "Engineering", status: "Active", joined: "2020-12-11", color: "bg-amber-500", leaveBalance: { annual: 10, sick: 10, personal: 3 }, points: 135 },
+                { id: 12, name: "Ava Thompson", email: "ava.thompson@peoplehub.com", password: "employee123", role: "employee", department: "HR", status: "Active", joined: "2023-05-08", color: "bg-lime-600", leaveBalance: { annual: 12, sick: 10, personal: 3 }, points: 50 },
+                { id: 13, name: "Manager One", email: "manager@peoplehub.com", password: "manager123", role: "manager", department: "Engineering", status: "Active", joined: "2020-01-01", color: "bg-indigo-500", leaveBalance: { annual: 15, sick: 10, personal: 5 }, points: 200 },
+            ];
+
+            const leaveRequests = [
+                { id: 1, employeeId: 2, employee: "Ali Mwanzuri", type: "Sick", from: "2026-08-19", to: "2026-08-20", days: 2, status: "Pending" },
+                { id: 2, employeeId: 10, employee: "Sophia Martinez", type: "Vacation", from: "2026-08-10", to: "2026-08-17", days: 8, status: "Approved" },
+                { id: 3, employeeId: 7, employee: "James Lee", type: "Vacation", from: "2026-07-01", to: "2026-07-03", days: 3, status: "Approved" },
+                { id: 4, employeeId: 9, employee: "Noah Garcia", type: "Personal", from: "2026-06-15", to: "2026-06-15", days: 1, status: "Rejected" },
+                { id: 5, employeeId: 8, employee: "Olivia Davis", type: "Sick", from: "2026-05-20", to: "2026-05-21", days: 2, status: "Approved" },
+            ];
+
+            const jobs = [
+                { id: 1, title: "Backend Engineer", department: "Engineering", status: "Open", applicants: 14 },
+                { id: 2, title: "Product Marketing Lead", department: "Marketing", status: "Open", applicants: 6 },
+                { id: 3, title: "Payroll Accountant", department: "Finance", status: "Closed", applicants: 22 },
+            ];
+
+            const onboardingTasks = [
+                { id: 1, employee: "Ali Mwanzuri", task: "Complete IT equipment setup", status: "Pending" },
+                { id: 2, employee: "Ava Thompson", task: "Sign employment contract", status: "Done" },
+                { id: 3, employee: "Sarah Chen", task: "Security training", status: "Pending" },
+                { id: 4, employee: "Liam Johnson", task: "Team introduction", status: "Done" },
+            ];
+
+            const payroll = employees.slice(0, 8).map((e, i) => ({
+                id: e.id,
+                employee: e.name,
+                month: "August 2026",
+                amount: 3200 + i * 350,
+                status: i % 3 === 0 ? "Pending" : "Paid",
+            }));
+
+            const performance = [
+                { id: 1, employee: "Sarah Chen", period: "Q2 2026", score: 4.6 },
+                { id: 2, employee: "Michael Brown", period: "Q2 2026", score: 4.1 },
+                { id: 3, employee: "Ali Mwanzuri", period: "Q2 2026", score: 3.9 },
+                { id: 4, employee: "Liam Johnson", period: "Q2 2026", score: 4.4 },
+                { id: 5, employee: "Emma Wilson", period: "Q2 2026", score: 4.2 },
+                { id: 6, employee: "Harper Martin", period: "Q2 2026", score: 4.0 },
+            ];
+
+            const documents = [
+                { id: 1, name: "Employment Contract.pdf", date: "2026-06-10" },
+                { id: 2, name: "ID Verification.pdf", date: "2026-06-11" },
+                { id: 3, name: "NDA Agreement.pdf", date: "2026-06-12" },
+            ];
+
+            const payslips = [
+                { id: 1, month: "July 2026", amount: 1200 },
+                { id: 2, month: "June 2026", amount: 1200 },
+                { id: 3, month: "May 2026", amount: 1150 },
+                { id: 4, month: "April 2026", amount: 1150 },
+            ];
+
+            const attendanceWeek = [
+                { day: "Mon", status: "Present" },
+                { day: "Tue", status: "Present" },
+                { day: "Wed", status: "Absent" },
+                { day: "Thu", status: "Present" },
+                { day: "Fri", status: "Not marked" },
+                { day: "Sat", status: "Weekend" },
+                { day: "Sun", status: "Weekend" },
+            ];
+
+            const announcements = [
+                { id: 1, title: "🏆 Q3 Performance Reviews", content: "Performance reviews for Q3 will begin next week. Please prepare your self-assessments.", date: "2026-08-15", pinned: true, department: "All" },
+                { id: 2, title: "🎉 New Hire Onboarding", content: "Welcome Ali Mwanzuri and Ava Thompson to the team! Please complete all onboarding tasks.", date: "2026-08-10", pinned: false, department: "All" },
+                { id: 3, title: "📊 Payroll Update", content: "August payroll will be processed on the 25th. Please verify your timesheets.", date: "2026-08-05", pinned: false, department: "All" },
+                { id: 4, title: "🛠️ Sprint Planning Moved", content: "Engineering sprint planning has been moved to Monday 10 AM this week only.", date: "2026-08-12", pinned: false, department: "Engineering" },
+            ];
+
+            const notifications = [
+                { id: 1, message: "Welcome to PeopleHub HRMS!", type: "success", read: false, date: new Date().toISOString(), link: null },
+                { id: 2, message: "New announcement posted: Q3 Performance Reviews", type: "info", read: false, date: new Date().toISOString(), link: null },
+            ];
+
+            return {
+                employees,
+                leaveRequests,
+                jobs,
+                onboardingTasks,
+                payroll,
+                performance,
+                documents,
+                payslips,
+                attendanceWeek,
+                announcements,
+                notifications,
+            };
+        }
+
+        // ─── Toast Provider ──────────────────────────────────────────────────────
+        const ToastContext = createContext();
+
+        function useToast() { return useContext(ToastContext); }
+
+        function ToastProvider({ children }) {
+            const [toasts, setToasts] = useState([]);
+
+            const addToast = useCallback((message, type = 'info', duration = 3000) => {
+                const id = Date.now() + Math.random();
+                setToasts(prev => [...prev, { id, message, type, duration }]);
+                setTimeout(() => {
+                    setToasts(prev => prev.filter(t => t.id !== id));
+                }, duration);
+            }, []);
+
+            return (
+                <ToastContext.Provider value={addToast}>
+                    {children}
+                    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+                        {toasts.map(t => (
+                            <div key={t.id} className="toast-enter pointer-events-auto bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[20px] shadow-2xl border border-[#E3E1E6] dark:border-[#3D3B43] p-4 flex items-start gap-3">
+                                <div className="shrink-0 mt-0.5">
+                                    {t.type === 'success' && <CheckCircle size={20} className="text-emerald-500" />}
+                                    {t.type === 'error' && <AlertCircle size={20} className="text-rose-500" />}
+                                    {t.type === 'warning' && <AlertCircle size={20} className="text-amber-500" />}
+                                    {t.type === 'info' && <Info size={20} className="text-blue-500" />}
+                                </div>
+                                <p className="text-sm text-[#1D1B20] dark:text-[#E6E1E9] flex-1">{t.message}</p>
+                                <button onClick={() => setToasts(prev => prev.filter(x => x.id !== t.id))} className="text-[#79747E] dark:text-[#A9A5B0] hover:text-[#1D1B20] dark:hover:text-[#E6E1E9]">
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </ToastContext.Provider>
+            );
+        }
+
+        // ─── Theme Provider ──────────────────────────────────────────────────────
+        const ThemeContext = createContext();
+
+        function useTheme() { return useContext(ThemeContext); }
+
+        function ThemeProvider({ children }) {
+            const [dark, setDark] = useState(() => {
+                try { return localStorage.getItem('peoplehub-theme') === 'dark'; } catch { return false; }
+            });
+
+            useEffect(() => {
+                if (dark) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('peoplehub-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('peoplehub-theme', 'light');
+                }
+            }, [dark]);
+
+            return (
+                <ThemeContext.Provider value={{ dark, toggle: () => setDark(d => !d) }}>
+                    {children}
+                </ThemeContext.Provider>
+            );
+        }
+
+        // ─── Utilities ─────────────────────────────────────────────────────────────
+        function StatusPill({ status }) {
+            const map = {
+                Active: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+                "On Leave": "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+                Approved: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+                Pending: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+                Rejected: "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300",
+                Open: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+                Closed: "bg-[#E3E1E6] text-[#49454F] dark:bg-[#3D3B43] dark:text-[#A9A5B0]",
+                Paid: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+                Done: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+                Present: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+                Absent: "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300",
+                "Not marked": "bg-[#E3E1E6] text-[#49454F] dark:bg-[#3D3B43] dark:text-[#A9A5B0]",
+                Weekend: "bg-[#ECEAF0] text-[#938F99] dark:bg-[#3D3B43] dark:text-[#88849A]",
+            };
+            return <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${map[status] || "bg-[#ECEAF0] text-[#49454F] dark:bg-[#3D3B43] dark:text-[#A9A5B0]"}`}>{status}</span>;
+        }
+
+        function Modal({ title, onClose, children, maxW = 'max-w-md' }) {
+            return (
+                <div className="fixed inset-0 bg-[#1D1B20]/50 dark:bg-[#0A0A0E]/70 flex items-center justify-center z-50 p-4" onClick={onClose}>
+                    <div className={`bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] shadow-2xl w-full ${maxW} p-6 max-h-[90vh] overflow-y-auto`} onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between mb-5">
+                            <h3 className="text-xl font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{title}</h3>
+                            <button onClick={onClose} className="m3-tap w-9 h-9 rounded-full flex items-center justify-center text-[#49454F] dark:text-[#A9A5B0] hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43]">
+                                <X size={18} />
+                            </button>
+                        </div>
+                        {children}
+                    </div>
+                </div>
+            );
+        }
+
+        function StatCard({ label, value, icon: Icon, color, subtitle }) {
+            return (
+                <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.06),0_1px_3px_1px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04),0_1px_3px_1px_rgba(255,255,255,0.03)]">
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="text-sm text-[#49454F] dark:text-[#A9A5B0] font-medium">{label}</span>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${color}`}>
+                            <Icon size={18} />
+                        </div>
+                    </div>
+                    <div className="text-3xl font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{value}</div>
+                    {subtitle && <div className="text-xs text-[#79747E] dark:text-[#88849A] mt-1">{subtitle}</div>}
+                </div>
+            );
+        }
+
+        // ─── Welcome Overlay (full-screen blurred gradient, swipe/tap up to dismiss) ─
+        function WelcomeOverlay({ name, subtitle, initials, avatarColor, gradient, onDismiss }) {
+            const [dragY, setDragY] = useState(0);
+            const [dragging, setDragging] = useState(false);
+            const [closing, setClosing] = useState(false);
+            const startY = useRef(0);
+            const dismissed = useRef(false);
+
+            const dismiss = () => {
+                if (dismissed.current) return;
+                dismissed.current = true;
+                setClosing(true);
+                setTimeout(onDismiss, 320);
+            };
+
+            const getY = (e) => (e.touches && e.touches.length ? e.touches[0].clientY : e.clientY);
+
+            const handleDown = (e) => {
+                setDragging(true);
+                startY.current = getY(e);
+            };
+            const handleMove = (e) => {
+                if (!dragging || closing) return;
+                const delta = getY(e) - startY.current;
+                if (delta < 0) setDragY(delta);
+            };
+            const handleUp = () => {
+                if (closing) return;
+                setDragging(false);
+                if (dragY < -70) {
+                    dismiss();
+                } else {
+                    setDragY(0);
+                }
+            };
+
+            return (
+                <div
+                    className={`fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden touch-none select-none cursor-pointer transition-transform ${closing ? '-translate-y-full duration-300 ease-in' : 'duration-200 ease-out'}`}
+                    style={!closing ? { transform: `translateY(${dragY}px)` } : undefined}
+                    onPointerDown={handleDown}
+                    onPointerMove={handleMove}
+                    onPointerUp={handleUp}
+                    onPointerLeave={() => dragging && handleUp()}
+                    onClick={dismiss}
+                >
+                    {/* Blurred gradient backdrop */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+                    <div className="absolute -top-24 -left-20 w-80 h-80 rounded-full bg-white/30 blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-32 -right-16 w-96 h-96 rounded-full bg-black/10 blur-3xl pointer-events-none" />
+                    <div className="absolute top-1/3 right-1/4 w-52 h-52 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+
+                    {/* Frosted-glass welcome card */}
+                    <div className="relative backdrop-blur-2xl bg-white/15 dark:bg-black/25 border border-white/30 dark:border-white/10 rounded-[36px] px-10 py-12 mx-6 max-w-sm w-full text-center shadow-2xl">
+                        <div className={`w-20 h-20 mx-auto rounded-full ${avatarColor} text-white flex items-center justify-center text-2xl font-bold ring-4 ring-white/40 shadow-lg mb-5`}>
+                            {initials}
+                        </div>
+                        <h2 className="text-2xl font-semibold text-white drop-shadow-sm g-title">{name}</h2>
+                        <p className="text-white/90 text-sm mt-1 drop-shadow-sm">{subtitle}</p>
+                    </div>
+
+                    {/* Swipe-up affordance */}
+                    <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-1 text-white/90 pointer-events-none">
+                        <ChevronUp size={22} className="animate-bounce" />
+                        <span className="text-xs font-medium tracking-wide">Swipe up or tap to continue</span>
+                    </div>
+                </div>
+            );
+        }
+
+        // ─── Login Components ──────────────────────────────────────────────────────
+        function AdminLogin({ onLogin, goEmployee }) {
+            const [email, setEmail] = useState("");
+            const [password, setPassword] = useState("");
+            const [showPw, setShowPw] = useState(false);
+            const [error, setError] = useState("");
+            const { dark, toggle } = useTheme();
+            const { state, dispatch } = useApp();
+
+            function submit(e) {
+                e.preventDefault();
+                const user = state.employees.find(emp => emp.email === email && emp.password === password);
+                if (user && (user.role === 'admin' || user.role === 'manager')) {
+                    setError("");
+                    onLogin(user);
+                } else {
+                    setError("Email atau password salah, atau Anda bukan admin/manager.");
+                }
+            }
+
+            const t = (key) => TRANSLATIONS[state.language][key] || key;
+
+            return (
+                <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-4 py-10 bg-[#F3F1F7] dark:bg-[#1C1B1F]">
+                    <button onClick={toggle} className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-[#FFFBFE] dark:bg-[#2C2A30] shadow-md flex items-center justify-center text-[#49454F] dark:text-[#A9A5B0] hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43] transition">
+                        {dark ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#D3E3FD] dark:bg-[#1A3A6A] opacity-70 blur-3xl" />
+                    <div className="absolute -bottom-32 -right-16 w-[28rem] h-[28rem] rounded-full bg-[#FDE293] dark:bg-[#4A3A1A] opacity-40 blur-3xl" />
+                    <div className="absolute top-1/3 -right-24 w-72 h-72 rounded-full bg-[#C4EED0] dark:bg-[#1A4A3A] opacity-40 blur-3xl" />
+
+                    <div className="relative w-20 h-20 rounded-[28px] bg-[#0B57D0] dark:bg-[#1A5A9A] flex items-center justify-center mb-5 shadow-xl shadow-[#AECBFA] dark:shadow-[#0A2A5A]">
+                        <Shield className="text-white" size={34} />
+                    </div>
+                    <h1 className="relative text-[28px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">PeopleHub HRMS</h1>
+                    <p className="relative text-[#49454F] dark:text-[#A9A5B0] mb-8">{t('dashboard')} Portal</p>
+
+                    <form onSubmit={submit} className="relative bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] shadow-[0_1px_2px_rgba(0,0,0,0.06),0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04),0_2px_8px_rgba(255,255,255,0.04)] p-8 w-full max-w-sm">
+                        <h2 className="text-lg font-medium text-[#1D1B20] dark:text-[#E6E1E9] text-center mb-6 g-title">{t('signIn')}</h2>
+
+                        <label className="text-xs font-medium text-[#49454F] dark:text-[#A9A5B0] pl-4">Email address</label>
+                        <div className="relative mt-1 mb-4">
+                            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#79747E] dark:text-[#88849A]" />
+                            <input value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@peoplehub.com" className="w-full bg-[#F3F1F7] dark:bg-[#35333A] rounded-full pl-11 pr-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                        </div>
+
+                        <label className="text-xs font-medium text-[#49454F] dark:text-[#A9A5B0] pl-4">Password</label>
+                        <div className="relative mt-1 mb-2">
+                            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#79747E] dark:text-[#88849A]" />
+                            <input type={showPw ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter your password" className="w-full bg-[#F3F1F7] dark:bg-[#35333A] rounded-full pl-11 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                            <button type="button" onClick={() => setShowPw(s => !s)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#79747E] dark:text-[#88849A]">
+                                {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                        </div>
+
+                        {error && <p className="text-rose-600 dark:text-rose-400 text-sm mb-2 pl-4">{error}</p>}
+
+                        <button type="submit" className="m3-tap w-full bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-medium rounded-full py-3.5 mt-4 transition shadow-sm">
+                            {t('signIn')}
+                        </button>
+
+                        <div className="border-t border-[#ECEAF0] dark:border-[#35333A] mt-6 pt-4 text-center text-sm">
+                            <p className="text-[#49454F] dark:text-[#A9A5B0] mb-2">Don't have an account? <span className="text-[#0B57D0] dark:text-[#7BC0FF] font-medium cursor-pointer">Sign Up</span></p>
+                            <button onClick={goEmployee} className="text-[#49454F] dark:text-[#A9A5B0] hover:text-[#0B57D0] dark:hover:text-[#7BC0FF] inline-flex items-center gap-1.5">
+                                <User size={14} /> Employee Portal →
+                            </button>
+                        </div>
+                    </form>
+
+                    <div className="relative bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] px-6 py-4 mt-6 text-center shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04)]">
+                        <p className="text-sm font-medium text-[#1D1B20] dark:text-[#E6E1E9]">Demo Credentials</p>
+                        <p className="text-xs text-[#49454F] dark:text-[#A9A5B0] font-mono mt-1">admin@peoplehub.com / admin123</p>
+                        <p className="text-xs text-[#49454F] dark:text-[#A9A5B0] font-mono">manager@peoplehub.com / manager123</p>
+                    </div>
+                </div>
+            );
+        }
+
+        function EmployeeLogin({ onLogin, goAdmin }) {
+            const [email, setEmail] = useState("");
+            const [password, setPassword] = useState("");
+            const [showPw, setShowPw] = useState(false);
+            const [error, setError] = useState("");
+            const { dark, toggle } = useTheme();
+            const { state, dispatch } = useApp();
+
+            function submit(e) {
+                e.preventDefault();
+                const user = state.employees.find(emp => emp.email === email && emp.password === password);
+                if (user && user.role === 'employee') {
+                    setError("");
+                    onLogin(user);
+                } else {
+                    setError("Email atau password salah, atau Anda bukan employee.");
+                }
+            }
+
+            const t = (key) => TRANSLATIONS[state.language][key] || key;
+
+            return (
+                <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-4 py-10 bg-[#F3F1F7] dark:bg-[#1C1B1F]">
+                    <button onClick={toggle} className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-[#FFFBFE] dark:bg-[#2C2A30] shadow-md flex items-center justify-center text-[#49454F] dark:text-[#A9A5B0] hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43] transition">
+                        {dark ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#C4EED0] dark:bg-[#1A4A3A] opacity-70 blur-3xl" />
+                    <div className="absolute -bottom-32 -left-16 w-[28rem] h-[28rem] rounded-full bg-[#D3E3FD] dark:bg-[#1A3A6A] opacity-50 blur-3xl" />
+                    <div className="absolute top-1/3 -left-24 w-72 h-72 rounded-full bg-[#FDE293] dark:bg-[#4A3A1A] opacity-30 blur-3xl" />
+
+                    <div className="relative w-20 h-20 rounded-[28px] bg-[#0B57D0] dark:bg-[#1A5A9A] flex items-center justify-center mb-5 shadow-xl shadow-[#AECBFA] dark:shadow-[#0A2A5A]">
+                        <Users className="text-white" size={34} />
+                    </div>
+                    <h1 className="relative text-[28px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">PeopleHub HRMS</h1>
+                    <p className="relative text-[#49454F] dark:text-[#A9A5B0] mb-8">Employee Portal</p>
+
+                    <form onSubmit={submit} className="relative bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] shadow-[0_1px_2px_rgba(0,0,0,0.06),0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04),0_2px_8px_rgba(255,255,255,0.04)] p-8 w-full max-w-sm">
+                        <h2 className="text-lg font-medium text-[#1D1B20] dark:text-[#E6E1E9] text-center mb-6 g-title">{t('signIn')}</h2>
+
+                        <label className="text-xs font-medium text-[#49454F] dark:text-[#A9A5B0] pl-4">Email address</label>
+                        <div className="relative mt-1 mb-4">
+                            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#79747E] dark:text-[#88849A]" />
+                            <input value={email} onChange={e => setEmail(e.target.value)} placeholder="you@peoplehub.com" className="w-full bg-[#F3F1F7] dark:bg-[#35333A] rounded-full pl-11 pr-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                        </div>
+
+                        <label className="text-xs font-medium text-[#49454F] dark:text-[#A9A5B0] pl-4">Password</label>
+                        <div className="relative mt-1 mb-2">
+                            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#79747E] dark:text-[#88849A]" />
+                            <input type={showPw ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter your password" className="w-full bg-[#F3F1F7] dark:bg-[#35333A] rounded-full pl-11 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                            <button type="button" onClick={() => setShowPw(s => !s)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#79747E] dark:text-[#88849A]">
+                                {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                        </div>
+                        {error && <p className="text-rose-600 dark:text-rose-400 text-sm mb-2 pl-4">{error}</p>}
+
+                        <button type="submit" className="m3-tap w-full bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-medium rounded-full py-3.5 transition shadow-sm">
+                            {t('signIn')}
+                        </button>
+
+                        <div className="border-t border-[#ECEAF0] dark:border-[#35333A] mt-6 pt-4 text-center text-sm">
+                            <p className="text-[#49454F] dark:text-[#A9A5B0] mb-2">Don't have an account? <span className="text-emerald-600 dark:text-emerald-400 font-medium cursor-pointer">Sign Up</span></p>
+                            <button onClick={goAdmin} className="text-[#49454F] dark:text-[#A9A5B0] hover:text-[#0B57D0] dark:hover:text-[#7BC0FF] inline-flex items-center gap-1.5">
+                                <ArrowLeft size={14} /> Back to HR Portal
+                            </button>
+                        </div>
+                    </form>
+
+                    <div className="relative bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] px-6 py-4 mt-6 text-center shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04)]">
+                        <p className="text-sm font-medium text-[#1D1B20] dark:text-[#E6E1E9]">Demo Employee Credentials</p>
+                        <p className="text-xs text-[#49454F] dark:text-[#A9A5B0] font-mono mt-1">harper.martin@peoplehub.com / employee123</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // ─── Sidebar ──────────────────────────────────────────────────────────────
+        function Sidebar({ title, icon: Icon, items, active, setActive, onLogout, subtitle, collapsed, setCollapsed }) {
+            const { state } = useApp();
+            const t = (key) => TRANSLATIONS[state.language][key] || key;
+
+            return (
+                <div className={`w-64 bg-[#ECE6F0] dark:bg-[#35333A] flex flex-col h-full py-4 px-3 transition-all duration-300 relative ${collapsed ? 'sidebar-collapsed' : ''}`}>
+                    <div className="flex items-center gap-3 px-3 pb-5">
+                        <div className="w-10 h-10 rounded-2xl bg-[#0B57D0] dark:bg-[#1A5A9A] flex items-center justify-center shadow-sm shrink-0">
+                            <Icon className="text-white" size={19} />
+                        </div>
+                        {!collapsed && (
+                            <div>
+                                <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] leading-tight text-[15px] g-title">PeopleHub</p>
+                                <p className="text-xs text-[#79747E] dark:text-[#88849A] leading-tight">{title}</p>
+                            </div>
+                        )}
+                        <button onClick={() => setCollapsed(!collapsed)} className="ml-auto text-[#79747E] dark:text-[#88849A] hover:text-[#1D1B20] dark:hover:text-[#E6E1E9]">
+                            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+                        </button>
+                    </div>
+
+                    {subtitle && !collapsed && (
+                        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#ECEAF0] dark:border-[#3D3B43]">
+                            {subtitle}
+                        </div>
+                    )}
+
+                    <nav className="flex-1 py-2 space-y-1 overflow-y-auto">
+                        {items.map(it => (
+                            <button
+                                key={it.key}
+                                onClick={() => setActive(it.key)}
+                                className={`m3-tap w-full flex items-center gap-3 pl-4 pr-4 py-3 rounded-full text-sm transition ${active === it.key
+                                        ? "bg-[#D3E3FD] dark:bg-[#1A3A6A] text-[#0B57D0] dark:text-[#7BC0FF] font-semibold"
+                                        : "text-[#49454F] dark:text-[#A9A5B0] font-medium hover:bg-[#E0DAE6] dark:hover:bg-[#3D3B43]"
+                                    }`}
+                            >
+                                <it.icon size={19} className={active === it.key ? "text-[#0B57D0] dark:text-[#7BC0FF]" : "text-[#49454F] dark:text-[#A9A5B0]"} />
+                                {!collapsed && <span>{it.label}</span>}
+                            </button>
+                        ))}
+                    </nav>
+
+                    {!collapsed && (
+                        <div className="pt-2 mt-2 border-t border-[#D6D0DA] dark:border-[#3D3B43]">
+                            <button onClick={onLogout} className="m3-tap w-full flex items-center gap-3 pl-4 pr-4 py-3 rounded-full text-sm font-medium text-[#49454F] dark:text-[#A9A5B0] hover:bg-[#E0DAE6] dark:hover:bg-[#3D3B43]">
+                                <LogOut size={18} /> {t('signOut')}
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ─── TopBar ──────────────────────────────────────────────────────────────
+        function TopBar({ title, name, email, avatarColor = "bg-[#0B57D0]", onToggleTheme, dark, onSearch }) {
+            const { state, dispatch } = useApp();
+            const [searchTerm, setSearchTerm] = useState("");
+            const [showNotifications, setShowNotifications] = useState(false);
+            const [showLang, setShowLang] = useState(false);
+            const addToast = useToast();
+            const t = (key) => TRANSLATIONS[state.language][key] || key;
+
+            const unreadCount = state.notifications.filter(n => !n.read).length;
+
+            const handleSearch = (e) => {
+                setSearchTerm(e.target.value);
+                if (onSearch) onSearch(e.target.value);
+            };
+
+            const markRead = (id) => {
+                dispatch({ type: 'MARK_NOTIFICATION_READ', payload: id });
+            };
+
+            const clearAll = () => {
+                dispatch({ type: 'CLEAR_NOTIFICATIONS' });
+                addToast("All notifications cleared", 'info');
+            };
+
+            const toggleLang = () => {
+                const newLang = state.language === 'en' ? 'id' : 'en';
+                dispatch({ type: 'SET_LANGUAGE', payload: newLang });
+                addToast(`Language switched to ${newLang.toUpperCase()}`, 'success');
+                setShowLang(false);
+            };
+
+            return (
+                <div className="flex items-center justify-between gap-6 px-8 py-4 bg-[#F3F1F7] dark:bg-[#1C1B1F] relative">
+                    <h1 className="text-[22px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title shrink-0">{title}</h1>
+
+                    {/* Global Search */}
+                    <div className="flex-1 max-w-sm hidden md:flex items-center gap-3 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-full pl-4 pr-2 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.08),0_1px_3px_1px_rgba(0,0,0,0.06)]">
+                        <Search size={16} className="text-[#79747E] dark:text-[#88849A]" />
+                        <input
+                            type="text"
+                            placeholder={t('search') || "Search PeopleHub"}
+                            className="flex-1 bg-transparent text-sm text-[#1D1B20] dark:text-[#E6E1E9] focus:outline-none"
+                            value={searchTerm}
+                            onChange={handleSearch}
+                        />
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0">
+                        {/* Language Toggle */}
+                        <div className="relative">
+                            <button onClick={() => setShowLang(!showLang)} className="w-9 h-9 rounded-full bg-[#FFFBFE] dark:bg-[#2C2A30] shadow-sm flex items-center justify-center text-[#49454F] dark:text-[#A9A5B0] hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43] transition">
+                                <Globe size={18} />
+                            </button>
+                            {showLang && (
+                                <div className="absolute right-0 mt-2 w-40 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[20px] shadow-xl border border-[#E3E1E6] dark:border-[#3D3B43] p-2 z-50">
+                                    <button onClick={toggleLang} className="w-full text-left px-4 py-2 rounded-full hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43] text-sm text-[#1D1B20] dark:text-[#E6E1E9]">
+                                        {state.language === 'en' ? '🇮🇩 Bahasa Indonesia' : '🇬🇧 English'}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Notifications */}
+                        <div className="relative">
+                            <button onClick={() => setShowNotifications(!showNotifications)} className="w-9 h-9 rounded-full bg-[#FFFBFE] dark:bg-[#2C2A30] shadow-sm flex items-center justify-center text-[#49454F] dark:text-[#A9A5B0] hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43] transition relative">
+                                <Bell size={18} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                                        {unreadCount}
+                                    </span>
+                                )}
+                            </button>
+                            {showNotifications && (
+                                <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] shadow-xl border border-[#E3E1E6] dark:border-[#3D3B43] p-4 z-50">
+                                    <div className="flex justify-between items-center mb-3">
+                                        <h4 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9]">Notifications</h4>
+                                        <button onClick={clearAll} className="text-xs text-[#79747E] dark:text-[#88849A] hover:text-rose-500">Clear all</button>
+                                    </div>
+                                    {state.notifications.length === 0 ? (
+                                        <p className="text-sm text-[#79747E] dark:text-[#88849A]">No notifications</p>
+                                    ) : (
+                                        state.notifications.map(n => (
+                                            <div key={n.id} className={`flex items-start gap-3 p-2 rounded-xl ${n.read ? 'opacity-60' : 'bg-[#F3F1F7] dark:bg-[#35333A]'}`}>
+                                                <div className="shrink-0 mt-0.5">
+                                                    {n.type === 'success' && <CheckCircle size={16} className="text-emerald-500" />}
+                                                    {n.type === 'error' && <AlertCircle size={16} className="text-rose-500" />}
+                                                    {n.type === 'warning' && <AlertCircle size={16} className="text-amber-500" />}
+                                                    {n.type === 'info' && <Info size={16} className="text-blue-500" />}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <p className="text-sm text-[#1D1B20] dark:text-[#E6E1E9]">{n.message}</p>
+                                                    <p className="text-xs text-[#79747E] dark:text-[#88849A]">{new Date(n.date).toLocaleDateString()}</p>
+                                                </div>
+                                                {!n.read && (
+                                                    <button onClick={() => markRead(n.id)} className="text-xs text-[#0B57D0] dark:text-[#7BC0FF] font-medium">Mark read</button>
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        <button onClick={onToggleTheme} className="w-9 h-9 rounded-full bg-[#FFFBFE] dark:bg-[#2C2A30] shadow-sm flex items-center justify-center text-[#49454F] dark:text-[#A9A5B0] hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43] transition">
+                            {dark ? <Sun size={18} /> : <Moon size={18} />}
+                        </button>
+
+                        <div className="w-px h-6 bg-[#D6D0DA] dark:bg-[#3D3B43]" />
+                        <div className="text-right leading-tight hidden sm:block">
+                            <p className="text-sm font-semibold text-[#1D1B20] dark:text-[#E6E1E9]">{name}</p>
+                            <p className="text-xs text-[#79747E] dark:text-[#88849A]">{email}</p>
+                        </div>
+                        <div className={`w-10 h-10 rounded-full ${avatarColor} text-white flex items-center justify-center text-sm font-bold ring-2 ring-white dark:ring-[#2C2A30] shadow-sm`}>
+                            {name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ─── Admin App ────────────────────────────────────────────────────────────
+
+        function AdminApp({ onLogout, user }) {
+            const { state, dispatch } = useApp();
+            const [active, setActive] = useState("dashboard");
+            const [showWelcome, setShowWelcome] = useState(true);
+            const [showAddEmp, setShowAddEmp] = useState(false);
+            const [showAddJob, setShowAddJob] = useState(false);
+            const [showAddAnnouncement, setShowAddAnnouncement] = useState(false);
+            const [showEmpDetail, setShowEmpDetail] = useState(null);
+            const [newEmp, setNewEmp] = useState({ name: "", email: "", jobTitle: "", role: "employee", department: DEPARTMENTS[0] });
+            const [newJob, setNewJob] = useState({ title: "", department: DEPARTMENTS[0] });
+            const [newAnnouncement, setNewAnnouncement] = useState({ title: "", content: "", department: "All" });
+            const [empSearch, setEmpSearch] = useState("");
+            const [empFilterDept, setEmpFilterDept] = useState("All");
+            const [empFilterStatus, setEmpFilterStatus] = useState("All");
+            const [activity, setActivity] = useState(["System initialized — Ready"]);
+            const [collapsed, setCollapsed] = useState(false);
+            const [analyticsFilter, setAnalyticsFilter] = useState("all");
+            const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
+            const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+            const addToast = useToast();
+            const { dark, toggle } = useTheme();
+
+            const isManager = user?.role === 'manager';
+            const isAdmin = user?.role === 'admin';
+            const userDept = user?.department;
+
+            const employees = state.employees;
+            const leaveRequests = state.leaveRequests;
+            const jobs = state.jobs;
+            const onboarding = state.onboardingTasks;
+            const payroll = state.payroll;
+            const performance = state.performance;
+            const announcements = state.announcements;
+
+            const t = (key) => TRANSLATIONS[state.language][key] || key;
+
+            // ─── Filter data for manager ──────────────────────────────────────────
+            const visibleEmployees = isManager ? employees.filter(e => e.department === userDept || e.id === user.id) : employees;
+            const visibleLeaveRequests = isManager ? leaveRequests.filter(l => {
+                const emp = employees.find(e => e.id === l.employeeId);
+                return emp?.department === userDept;
+            }) : leaveRequests;
+            const visibleJobs = isManager ? jobs.filter(j => j.department === userDept) : jobs;
+            const visibleOnboarding = isManager ? onboarding.filter(o => {
+                const emp = employees.find(e => e.name === o.employee);
+                return emp?.department === userDept;
+            }) : onboarding;
+            const visiblePayroll = isManager ? payroll.filter(p => {
+                const emp = employees.find(e => e.name === p.employee);
+                return emp?.department === userDept;
+            }) : payroll;
+            // Managers only see announcements that are global or targeted at their own department
+            const visibleAnnouncements = isManager ? announcements.filter(a => !a.department || a.department === 'All' || a.department === userDept) : announcements;
+
+            // ─── Item lists ────────────────────────────────────────────────────────
+            const baseItems = [
+                { key: "dashboard", label: t('dashboard'), icon: LayoutGrid },
+                { key: "employees", label: t('employees'), icon: Users },
+                { key: "org", label: t('orgStructure'), icon: Building2 },
+                { key: "attendance", label: t('attendance'), icon: Clock },
+                { key: "leave", label: t('leaveManagement'), icon: Calendar },
+                { key: "recruitment", label: t('recruitment'), icon: Briefcase },
+                { key: "onboarding", label: t('onboarding'), icon: ClipboardCheck },
+                { key: "payroll", label: t('payroll'), icon: DollarSign },
+                { key: "performance", label: t('performance'), icon: TrendingUp },
+                { key: "announcements", label: t('announcements'), icon: Megaphone },
+                { key: "analytics", label: t('analytics'), icon: PieChart },
+            ];
+
+            const managerItems = [
+                { key: "dashboard", label: t('dashboard'), icon: LayoutGrid },
+                { key: "myTeam", label: t('myTeam'), icon: UsersRound },
+                { key: "org", label: t('orgStructure'), icon: Building2 },
+                { key: "attendance", label: t('attendance'), icon: Clock },
+                { key: "leave", label: t('leaveManagement'), icon: Calendar },
+                { key: "recruitment", label: t('recruitment'), icon: Briefcase },
+                { key: "onboarding", label: t('onboarding'), icon: ClipboardCheck },
+                { key: "payroll", label: t('payroll'), icon: DollarSign },
+                { key: "performance", label: t('performance'), icon: TrendingUp },
+                { key: "announcements", label: t('announcements'), icon: Megaphone },
+                { key: "analytics", label: t('analytics'), icon: PieChart },
+            ];
+
+            const items = isManager ? managerItems : baseItems;
+
+            // ─── Handlers ──────────────────────────────────────────────────────────
+            const addNotification = (msg, type = 'info', link = null) => {
+                dispatch({ type: 'ADD_NOTIFICATION', payload: { id: Date.now(), message: msg, type, read: false, date: new Date().toISOString(), link } });
+            };
+
+            const logActivity = (msg) => {
+                setActivity(a => [msg, ...a].slice(0, 8));
+                addToast(msg, 'info', 2500);
+            };
+
+            const sendEmail = (to, subject, body) => {
+                addToast(`📧 Email sent to ${to}: ${subject}`, 'success');
+            };
+
+            const awardPoints = (userId, points, reason) => {
+                const emp = employees.find(e => e.id === userId);
+                if (emp) {
+                    const updated = employees.map(e => e.id === userId ? { ...e, points: (e.points || 0) + points } : e);
+                    dispatch({ type: 'SET_EMPLOYEES', payload: updated });
+                    addNotification(`${emp.name} earned ${points} points for ${reason}!`, 'success');
+                    addToast(`🏆 ${points} points awarded to ${emp.name}`, 'success');
+                }
+            };
+
+            // ─── Add Employee ──────────────────────────────────────────────────────
+            // Only Admins may assign a system role (admin/manager/employee). Managers
+            // can add employees to their own team, but the new hire's role is always
+            // forced to "employee" and their department locked to the manager's dept.
+            const addEmployee = () => {
+                if (!newEmp.name || !newEmp.email) { addToast("Please fill in all fields", 'error'); return; }
+                const emp = {
+                    id: Date.now(),
+                    name: newEmp.name,
+                    email: newEmp.email,
+                    jobTitle: newEmp.jobTitle,
+                    role: isAdmin ? (newEmp.role || 'employee') : 'employee',
+                    department: isManager ? userDept : newEmp.department,
+                    password: "employee123",
+                    status: "Active",
+                    joined: new Date().toISOString().slice(0, 10),
+                    color: EMPLOYEE_COLORS[employees.length % EMPLOYEE_COLORS.length],
+                    leaveBalance: { annual: 10, sick: 10, personal: 3 },
+                    points: 0,
+                };
+                dispatch({ type: 'SET_EMPLOYEES', payload: [emp, ...employees] });
+                logActivity(`Added employee — ${emp.name}`);
+                sendEmail(emp.email, "Welcome to PeopleHub", "Your account has been created.");
+                setNewEmp({ name: "", email: "", jobTitle: "", role: "employee", department: isManager ? userDept : DEPARTMENTS[0] });
+                setShowAddEmp(false);
+                addToast(`✅ ${emp.name} added`, 'success');
+            };
+
+            // ─── Remove Employee ──────────────────────────────────────────────────
+            const removeEmployee = (id) => {
+                const emp = employees.find(e => e.id === id);
+                if (emp && emp.role === 'admin') { addToast("Cannot remove admin", 'error'); return; }
+                dispatch({ type: 'SET_EMPLOYEES', payload: employees.filter(e => e.id !== id) });
+                logActivity(`Removed employee — ${emp?.name}`);
+                addToast(`🗑️ ${emp?.name} removed`, 'warning');
+            };
+
+            // ─── Jobs ──────────────────────────────────────────────────────────────
+            const addJob = () => {
+                if (!newJob.title) { addToast("Please enter a job title", 'error'); return; }
+                const job = { id: Date.now(), ...newJob, status: "Open", applicants: 0 };
+                dispatch({ type: 'SET_JOBS', payload: [job, ...jobs] });
+                logActivity(`Posted job — ${job.title}`);
+                setNewJob({ title: "", department: DEPARTMENTS[0] });
+                setShowAddJob(false);
+                addToast(`📋 ${job.title} posted`, 'success');
+            };
+
+            // ─── Leave ─────────────────────────────────────────────────────────────
+            const decideLeave = (id, decision) => {
+                const updated = leaveRequests.map(l => l.id === id ? { ...l, status: decision } : l);
+                dispatch({ type: 'SET_LEAVE_REQUESTS', payload: updated });
+                const l = leaveRequests.find(x => x.id === id);
+                if (l) {
+                    logActivity(`${decision} leave for ${l.employee}`);
+                    addNotification(`${l.employee}'s leave was ${decision}`, decision === 'Approved' ? 'success' : 'error');
+                    sendEmail(l.employee, `Leave ${decision}`, `Your leave request for ${l.from} to ${l.to} has been ${decision}.`);
+                    if (decision === 'Approved') {
+                        awardPoints(l.employeeId, 5, "Leave approved");
+                    }
+                }
+            };
+
+            // ─── Onboarding ────────────────────────────────────────────────────────
+            const toggleOnboarding = (id) => {
+                const updated = onboarding.map(t => t.id === id ? { ...t, status: t.status === "Done" ? "Pending" : "Done" } : t);
+                dispatch({ type: 'SET_ONBOARDING', payload: updated });
+                const t = onboarding.find(x => x.id === id);
+                if (t && t.status === "Pending") {
+                    const emp = employees.find(e => e.name === t.employee);
+                    if (emp) awardPoints(emp.id, 10, "Completed onboarding task");
+                }
+            };
+
+            // ─── Payroll ───────────────────────────────────────────────────────────
+            const processPayroll = () => {
+                const updated = payroll.map(p => ({ ...p, status: "Paid" }));
+                dispatch({ type: 'SET_PAYROLL', payload: updated });
+                logActivity("Processed payroll for August 2026");
+                addToast("💰 Payroll processed", 'success');
+                addNotification("Payroll for August 2026 has been processed.", 'success');
+            };
+
+            // ─── Announcements ─────────────────────────────────────────────────────
+            // Managers can only post to their own department (locked in the UI).
+            // Admins may target a specific department or "All" for a global post.
+            const addAnnouncement = () => {
+                if (!newAnnouncement.title || !newAnnouncement.content) { addToast("Please fill in all fields", 'error'); return; }
+                const targetDept = isManager ? userDept : (newAnnouncement.department || "All");
+                const ann = { id: Date.now(), title: newAnnouncement.title, content: newAnnouncement.content, department: targetDept, date: new Date().toISOString().slice(0, 10), pinned: false };
+                dispatch({ type: 'SET_ANNOUNCEMENTS', payload: [ann, ...announcements] });
+                logActivity(`Posted announcement — ${ann.title}`);
+                setNewAnnouncement({ title: "", content: "", department: isManager ? userDept : "All" });
+                setShowAddAnnouncement(false);
+                addToast(`📢 ${ann.title} posted`, 'success');
+                addNotification(`New announcement: ${ann.title}`, 'info');
+                // Simulate email to affected employees only (global or matching department)
+                employees.forEach(emp => {
+                    if (emp.role === 'employee' && (targetDept === 'All' || emp.department === targetDept)) {
+                        sendEmail(emp.email, "New Announcement", ann.content);
+                    }
+                });
+            };
+
+            const deleteAnnouncement = (id) => {
+                dispatch({ type: 'SET_ANNOUNCEMENTS', payload: announcements.filter(a => a.id !== id) });
+            };
+
+            const togglePin = (id) => {
+                dispatch({ type: 'SET_ANNOUNCEMENTS', payload: announcements.map(a => a.id === id ? { ...a, pinned: !a.pinned } : a) });
+            };
+
+            // ─── Analytics ──────────────────────────────────────────────────────────
+            const deptStats = DEPARTMENTS.map(d => ({
+                name: d,
+                count: employees.filter(e => e.department === d).length,
+            }));
+            const maxDeptCount = Math.max(...deptStats.map(d => d.count), 1);
+
+            const leaveStats = {
+                pending: visibleLeaveRequests.filter(l => l.status === 'Pending').length,
+                approved: visibleLeaveRequests.filter(l => l.status === 'Approved').length,
+                rejected: visibleLeaveRequests.filter(l => l.status === 'Rejected').length,
+            };
+
+            const turnoverRate = ((employees.filter(e => e.status === 'Inactive').length / employees.length) * 100).toFixed(1) || 0;
+
+            // ─── Leaderboard ──────────────────────────────────────────────────────
+            const leaderboard = [...employees].sort((a, b) => (b.points || 0) - (a.points || 0)).slice(0, 10);
+
+            // ─── Calendar ──────────────────────────────────────────────────────────
+            const getDaysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
+            const getFirstDay = (month, year) => new Date(year, month, 1).getDay();
+
+            const renderCalendar = () => {
+                const days = getDaysInMonth(calendarMonth, calendarYear);
+                const firstDay = getFirstDay(calendarMonth, calendarYear);
+                const today = new Date();
+                const isToday = (d) => today.getDate() === d && today.getMonth() === calendarMonth && today.getFullYear() === calendarYear;
+
+                const leavesOnDate = (d) => {
+                    const dateStr = `${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    return visibleLeaveRequests.filter(l => l.from <= dateStr && l.to >= dateStr);
+                };
+
+                let rows = [];
+                let cells = [];
+                for (let i = 0; i < firstDay; i++) {
+                    cells.push(<div key={`empty-${i}`} className="h-8 w-8"></div>);
+                }
+                for (let d = 1; d <= days; d++) {
+                    const le = leavesOnDate(d);
+                    const hasLeave = le.length > 0;
+                    const isPending = le.some(l => l.status === 'Pending');
+                    const isApproved = le.some(l => l.status === 'Approved');
+                    cells.push(
+                        <div key={d} className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium relative ${isToday(d) ? 'ring-2 ring-[#0B57D0]' : ''} ${hasLeave ? (isPending ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300') : 'text-[#1D1B20] dark:text-[#E6E1E9]'}`}>
+                            {d}
+                            {hasLeave && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#0B57D0] dark:bg-[#7BC0FF]"></span>}
+                        </div>
+                    );
+                    if ((firstDay + d) % 7 === 0 || d === days) {
+                        rows.push(<div key={`row-${d}`} className="flex gap-1 justify-between">{cells}</div>);
+                        cells = [];
+                    }
+                }
+                return rows;
+            };
+
+            // ─── Search ────────────────────────────────────────────────────────────
+            const handleGlobalSearch = (term) => {
+                setEmpSearch(term);
+            };
+
+            // ─── Filters ───────────────────────────────────────────────────────────
+            const filteredEmployees = visibleEmployees.filter(e => {
+                const matchName = e.name.toLowerCase().includes(empSearch.toLowerCase()) || e.email.toLowerCase().includes(empSearch.toLowerCase());
+                const matchDept = empFilterDept === "All" || e.department === empFilterDept;
+                const matchStatus = empFilterStatus === "All" || e.status === empFilterStatus;
+                return matchName && matchDept && matchStatus;
+            });
+
+            // ─── Print Payslip ─────────────────────────────────────────────────────
+            const printPayslip = (payslip) => {
+                const printWindow = window.open('', '_blank', 'width=600,height=400');
+                if (printWindow) {
+                    printWindow.document.write(`
+                        <html><head><title>Payslip ${payslip.month}</title>
+                        <style>body { font-family: Roboto, sans-serif; padding: 2rem; } .container { max-width: 400px; margin: auto; border: 1px solid #ccc; padding: 2rem; border-radius: 8px; } .header { text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 1rem; } .row { display: flex; justify-content: space-between; padding: 0.5rem 0; } .label { font-weight: 600; } .total { border-top: 2px solid #000; padding-top: 0.5rem; margin-top: 0.5rem; }</style>
+                        </head><body>
+                        <div class="container">
+                            <div class="header"><h2>PeopleHub HRMS</h2><p>Payslip for ${payslip.month}</p></div>
+                            <div class="row"><span class="label">Employee:</span><span>${payslip.employee}</span></div>
+                            <div class="row"><span class="label">Amount:</span><span>$${payslip.amount.toLocaleString()}</span></div>
+                            <div class="row"><span class="label">Status:</span><span>${payslip.status}</span></div>
+                            <div class="row total"><span class="label">Net Pay:</span><span>$${payslip.amount.toLocaleString()}</span></div>
+                        </div>
+                        </body></html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.print();
+                }
+            };
+
+            // ─── Render ────────────────────────────────────────────────────────────
+            return (
+                <>
+                    {showWelcome && (
+                        <WelcomeOverlay
+                            name={`Welcome, ${user.name.split(" ")[0]}!`}
+                            subtitle={isManager ? `Manager • ${user.department}` : 'Overview of your HR operations'}
+                            initials={user.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                            avatarColor={user.color || "bg-[#0B57D0]"}
+                            gradient={isManager ? "from-indigo-600 via-violet-500 to-fuchsia-600" : "from-blue-600 via-indigo-500 to-purple-600"}
+                            onDismiss={() => setShowWelcome(false)}
+                        />
+                    )}
+                <div className="flex h-screen bg-[#F3F1F7] dark:bg-[#1C1B1F] font-sans">
+                    <Sidebar
+                        title={isManager ? "Manager Portal" : "Pro HRMS"}
+                        icon={isManager ? UsersRound : Users}
+                        items={items}
+                        active={active}
+                        setActive={setActive}
+                        onLogout={onLogout}
+                        collapsed={collapsed}
+                        setCollapsed={setCollapsed}
+                    />
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                        <TopBar
+                            title={isManager ? "Manager Dashboard" : "Human Resource Management"}
+                            name={user.name}
+                            email={user.email}
+                            avatarColor={user.color}
+                            onToggleTheme={toggle}
+                            dark={dark}
+                            onSearch={handleGlobalSearch}
+                        />
+                        <div className="flex-1 overflow-y-auto p-8">
+                            {/* ─── DASHBOARD ──────────────────────────────────────── */}
+                            {active === "dashboard" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('welcome')}, {user.name}!</h2>
+                                    <p className="text-[#79747E] dark:text-[#88849A] mb-6">{isManager ? `Manager • ${user.department}` : 'Overview of your HR operations'}</p>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                                        <StatCard label={t('employees')} value={visibleEmployees.length} icon={Users} color="bg-blue-500" />
+                                        <StatCard label={t('pendingLeaves')} value={visibleLeaveRequests.filter(l => l.status === "Pending").length} icon={Calendar} color="bg-orange-500" />
+                                        <StatCard label={t('recruitment')} value={visibleJobs.filter(j => j.status === "Open").length} icon={Briefcase} color="bg-emerald-500" />
+                                        <StatCard label={t('onboarding')} value={visibleOnboarding.filter(t => t.status === "Pending").length} icon={ClipboardCheck} color="bg-purple-500" />
+                                    </div>
+
+                                    {visibleAnnouncements.length > 0 && (
+                                        <div className="mb-6 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <Megaphone size={18} className="text-[#0B57D0] dark:text-[#7BC0FF]" />
+                                                <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('announcements')}</h3>
+                                            </div>
+                                            <div className="space-y-2">
+                                                {visibleAnnouncements.slice(0, 3).map(a => (
+                                                    <div key={a.id} className="flex items-start gap-3 text-sm">
+                                                        {a.pinned && <span className="text-xs font-medium text-[#0B57D0] dark:text-[#7BC0FF]">📌</span>}
+                                                        <div>
+                                                            <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{a.title}</p>
+                                                            <p className="text-[#49454F] dark:text-[#A9A5B0] text-xs line-clamp-2">{a.content}</p>
+                                                            <span className="text-xs text-[#79747E] dark:text-[#88849A]">{a.date} · {(!a.department || a.department === 'All') ? 'All Employees' : a.department}</span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                        <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] mb-4 g-title">{t('quickActions') || "Quick Actions"}</h3>
+                                            <div className="space-y-3">
+                                                {(isAdmin || isManager) && (
+                                                    <button onClick={() => { setNewEmp({ name: "", email: "", jobTitle: "", role: "employee", department: isManager ? userDept : DEPARTMENTS[0] }); setShowAddEmp(true); }} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full py-2.5 text-sm flex items-center justify-center gap-2">
+                                                        <UserPlus size={16} /> {t('addEmployee')}
+                                                    </button>
+                                                )}
+                                                <button onClick={() => setShowAddJob(true)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-full py-2.5 text-sm flex items-center justify-center gap-2">
+                                                    <BriefcaseIcon size={16} /> {t('postJob')}
+                                                </button>
+                                                <button onClick={processPayroll} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full py-2.5 text-sm flex items-center justify-center gap-2">
+                                                    <Wallet size={16} /> {t('processPayroll')}
+                                                </button>
+                                                {isAdmin && (
+                                                    <button onClick={() => {}} className="w-full bg-[#ECEAF0] dark:bg-[#3D3B43] text-[#1D1B20] dark:text-[#E6E1E9] font-semibold rounded-full py-2.5 text-sm flex items-center justify-center gap-2 hover:bg-[#D6D0DA] dark:hover:bg-[#4A4850]">
+                                                        <FileSpreadsheet size={16} /> {t('exportCSV')}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] mb-4 g-title">{t('recentActivity') || "Recent Activity"}</h3>
+                                            <ul className="space-y-3 max-h-48 overflow-y-auto">
+                                                {activity.map((a, i) => (
+                                                    <li key={i} className="flex gap-2 text-sm text-[#49454F] dark:text-[#A9A5B0]">
+                                                        <span className="w-1.5 h-1.5 mt-1.5 rounded-full bg-[#0B57D0] dark:bg-[#7BC0FF] shrink-0" /> {a}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── EMPLOYEES / MY TEAM ───────────────────────────── */}
+                            {(active === "employees" || active === "myTeam") && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                                        <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{active === "myTeam" ? t('myTeam') : t('employees')}</h2>
+                                        {(isAdmin || isManager) && (
+                                            <button onClick={() => { setNewEmp({ name: "", email: "", jobTitle: "", role: "employee", department: isManager ? userDept : DEPARTMENTS[0] }); setShowAddEmp(true); }} className="bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white text-sm font-semibold rounded-full px-4 py-2 flex items-center gap-1.5">
+                                                <Plus size={16} /> {t('addEmployee')}
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-wrap gap-3 mb-4">
+                                        <div className="relative flex-1 min-w-[200px] max-w-xs">
+                                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#938F99] dark:text-[#88849A]" />
+                                            <input value={empSearch} onChange={e => setEmpSearch(e.target.value)} placeholder={`${t('search') || 'Search'}...`} className="w-full bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-full pl-9 pr-3 py-2.5 text-sm shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04)] focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                                        </div>
+                                        <select value={empFilterDept} onChange={e => setEmpFilterDept(e.target.value)} className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-full px-4 py-2.5 text-sm shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04)] focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]">
+                                            <option value="All">All Departments</option>
+                                            {DEPARTMENTS.map(d => <option key={d}>{d}</option>)}
+                                        </select>
+                                        <select value={empFilterStatus} onChange={e => setEmpFilterStatus(e.target.value)} className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-full px-4 py-2.5 text-sm shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(255,255,255,0.04)] focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]">
+                                            <option value="All">All Status</option>
+                                            <option value="Active">Active</option>
+                                            <option value="On Leave">On Leave</option>
+                                        </select>
+                                        <span className="text-sm text-[#79747E] dark:text-[#88849A] flex items-center">Showing {filteredEmployees.length} of {visibleEmployees.length}</span>
+                                    </div>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-sm">
+                                                <thead className="bg-[#F3F1F7] dark:bg-[#35333A] text-[#79747E] dark:text-[#88849A] text-left">
+                                                    <tr>
+                                                        <th className="py-3 px-5 font-semibold">Employee</th>
+                                                        <th className="py-3 px-5 font-semibold">Job Title</th>
+                                                        <th className="py-3 px-5 font-semibold">Role</th>
+                                                        <th className="py-3 px-5 font-semibold">Department</th>
+                                                        <th className="py-3 px-5 font-semibold">Status</th>
+                                                        <th className="py-3 px-5 font-semibold">Points</th>
+                                                        <th className="py-3 px-5 font-semibold"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {filteredEmployees.map(e => (
+                                                        <tr key={e.id} className="border-t border-[#ECEAF0] dark:border-[#35333A] hover:bg-[#F8F6FA] dark:hover:bg-[#35333A] cursor-pointer" onClick={() => setShowEmpDetail(e)}>
+                                                            <td className="py-3 px-5 flex items-center gap-3">
+                                                                <div className={`w-8 h-8 rounded-full ${e.color} text-white flex items-center justify-center text-xs font-bold`}>
+                                                                    {e.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                                                                </div>
+                                                                <div>
+                                                                    <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{e.name}</p>
+                                                                    <p className="text-xs text-[#938F99] dark:text-[#88849A]">{e.email}</p>
+                                                                </div>
+                                                            </td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0]">{e.jobTitle || "—"}</td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0] capitalize">{e.role}</td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0]">{e.department}</td>
+                                                            <td className="py-3 px-5"><StatusPill status={e.status} /></td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0] font-medium">{e.points || 0}</td>
+                                                            <td className="py-3 px-5 text-right">
+                                                                {isAdmin && e.role !== 'admin' && (
+                                                                    <button onClick={(ev) => { ev.stopPropagation();
+                                                                        removeEmployee(e.id); }} className="text-[#938F99] dark:text-[#88849A] hover:text-rose-600 dark:hover:text-rose-400">
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── ORG STRUCTURE ──────────────────────────────────── */}
+                            {active === "org" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('orgStructure')}</h2>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {DEPARTMENTS.map(d => {
+                                            const members = visibleEmployees.filter(e => e.department === d);
+                                            return (
+                                                <div key={d} className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                                    <div className="flex items-center gap-2 mb-3">
+                                                        <Building2 size={18} className="text-[#0B57D0] dark:text-[#7BC0FF]" />
+                                                        <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{d}</h3>
+                                                    </div>
+                                                    <p className="text-sm text-[#79747E] dark:text-[#88849A] mb-3">{members.length} member{members.length !== 1 ? "s" : ""}</p>
+                                                    <div className="flex -space-x-2 flex-wrap">
+                                                        {members.slice(0, 8).map(m => (
+                                                            <div key={m.id} title={m.name} className={`w-8 h-8 rounded-full ${m.color} text-white flex items-center justify-center text-xs font-bold border-2 border-white dark:border-[#2C2A30]`}>
+                                                                {m.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                                                            </div>
+                                                        ))}
+                                                        {members.length > 8 && <div className="w-8 h-8 rounded-full bg-[#ECEAF0] dark:bg-[#3D3B43] text-[#49454F] dark:text-[#A9A5B0] flex items-center justify-center text-xs font-bold border-2 border-white dark:border-[#2C2A30]">+{members.length - 8}</div>}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── ATTENDANCE ────────────────────────────────────── */}
+                            {active === "attendance" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('attendance')} — Today</h2>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-sm">
+                                                <thead className="bg-[#F3F1F7] dark:bg-[#35333A] text-[#79747E] dark:text-[#88849A] text-left">
+                                                    <tr>
+                                                        <th className="py-3 px-5 font-semibold">Employee</th>
+                                                        <th className="py-3 px-5 font-semibold">Department</th>
+                                                        <th className="py-3 px-5 font-semibold">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {visibleEmployees.map((e, i) => (
+                                                        <tr key={e.id} className="border-t border-[#ECEAF0] dark:border-[#35333A]">
+                                                            <td className="py-3 px-5 text-[#1D1B20] dark:text-[#E6E1E9] font-medium">{e.name}</td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0]">{e.department}</td>
+                                                            <td className="py-3 px-5"><StatusPill status={i % 5 === 0 ? "Absent" : "Present"} /></td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── LEAVE MANAGEMENT ────────────────────────────── */}
+                            {active === "leave" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('leaveManagement')}</h2>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-sm">
+                                                <thead className="bg-[#F3F1F7] dark:bg-[#35333A] text-[#79747E] dark:text-[#88849A] text-left">
+                                                    <tr>
+                                                        <th className="py-3 px-5 font-semibold">Employee</th>
+                                                        <th className="py-3 px-5 font-semibold">Type</th>
+                                                        <th className="py-3 px-5 font-semibold">Dates</th>
+                                                        <th className="py-3 px-5 font-semibold">Days</th>
+                                                        <th className="py-3 px-5 font-semibold">Status</th>
+                                                        <th className="py-3 px-5 font-semibold"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {visibleLeaveRequests.map(l => (
+                                                        <tr key={l.id} className="border-t border-[#ECEAF0] dark:border-[#35333A]">
+                                                            <td className="py-3 px-5 text-[#1D1B20] dark:text-[#E6E1E9] font-medium">{l.employee}</td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0]">{l.type}</td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0]">{l.from} → {l.to}</td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0]">{l.days}</td>
+                                                            <td className="py-3 px-5"><StatusPill status={l.status} /></td>
+                                                            <td className="py-3 px-5">
+                                                                {l.status === "Pending" && (
+                                                                    <div className="flex gap-2 justify-end">
+                                                                        <button onClick={() => decideLeave(l.id, "Approved")} className="p-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">
+                                                                            <ThumbsUp size={14} />
+                                                                        </button>
+                                                                        <button onClick={() => decideLeave(l.id, "Rejected")} className="p-1.5 rounded-full bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50">
+                                                                            <ThumbsDown size={14} />
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    {/* Calendar View */}
+                                    <div className="mt-6 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('calendar')}</h3>
+                                            <div className="flex gap-2">
+                                                <button onClick={() => { if (calendarMonth === 0) { setCalendarMonth(11);
+                                                        setCalendarYear(calendarYear - 1); } else setCalendarMonth(calendarMonth - 1); }} className="p-1 rounded-full hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43]">
+                                                    <ChevronLeft size={20} />
+                                                </button>
+                                                <span className="text-sm font-medium">{new Date(calendarYear, calendarMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
+                                                <button onClick={() => { if (calendarMonth === 11) { setCalendarMonth(0);
+                                                        setCalendarYear(calendarYear + 1); } else setCalendarMonth(calendarMonth + 1); }} className="p-1 rounded-full hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43]">
+                                                    <ChevronRight size={20} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-[#79747E] dark:text-[#88849A] mb-2">
+                                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                                        </div>
+                                        <div className="space-y-1">
+                                            {renderCalendar()}
+                                        </div>
+                                        <div className="flex gap-4 mt-4 text-xs">
+                                            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-emerald-100 dark:bg-emerald-900/40"></span> Approved</span>
+                                            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-amber-100 dark:bg-amber-900/40"></span> Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── RECRUITMENT ───────────────────────────────────── */}
+                            {active === "recruitment" && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                                        <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('recruitment')}</h2>
+                                        <button onClick={() => setShowAddJob(true)} className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-full px-4 py-2 flex items-center gap-1.5">
+                                            <Plus size={16} /> {t('postJob')}
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {visibleJobs.map(j => (
+                                            <div key={j.id} className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <Briefcase size={18} className="text-emerald-600 dark:text-emerald-400" />
+                                                    <StatusPill status={j.status} />
+                                                </div>
+                                                <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{j.title}</h3>
+                                                <p className="text-sm text-[#79747E] dark:text-[#88849A] mb-2">{j.department}</p>
+                                                <p className="text-xs text-[#938F99] dark:text-[#88849A]">{j.applicants} applicants</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── ONBOARDING ────────────────────────────────────── */}
+                            {active === "onboarding" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('onboarding')}</h2>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] divide-y divide-[#ECEAF0] dark:divide-[#35333A]">
+                                        {visibleOnboarding.map(t => (
+                                            <div key={t.id} className="flex items-center justify-between px-5 py-4">
+                                                <div>
+                                                    <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{t.task}</p>
+                                                    <p className="text-xs text-[#938F99] dark:text-[#88849A]">{t.employee}</p>
+                                                </div>
+                                                <button onClick={() => toggleOnboarding(t.id)} className="flex items-center gap-2">
+                                                    <StatusPill status={t.status} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="mt-4 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                        <div className="flex justify-between text-sm mb-2">
+                                            <span className="text-[#49454F] dark:text-[#A9A5B0]">Overall Onboarding Progress</span>
+                                            <span className="text-[#1D1B20] dark:text-[#E6E1E9] font-medium">{Math.round(visibleOnboarding.filter(t => t.status === "Done").length / visibleOnboarding.length * 100) || 0}%</span>
+                                        </div>
+                                        <div className="w-full h-2 bg-[#ECEAF0] dark:bg-[#3D3B43] rounded-full overflow-hidden">
+                                            <div className="h-full bg-[#0B57D0] dark:bg-[#1A5A9A] rounded-full transition-all duration-700" style={{ width: `${visibleOnboarding.filter(t => t.status === "Done").length / visibleOnboarding.length * 100 || 0}%` }} />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── PAYROLL ───────────────────────────────────────── */}
+                            {active === "payroll" && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                                        <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('payroll')} — August 2026</h2>
+                                        <button onClick={processPayroll} className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-full px-4 py-2 flex items-center gap-1.5">
+                                            <Wallet size={16} /> {t('processPayroll')}
+                                        </button>
+                                    </div>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-sm">
+                                                <thead className="bg-[#F3F1F7] dark:bg-[#35333A] text-[#79747E] dark:text-[#88849A] text-left">
+                                                    <tr>
+                                                        <th className="py-3 px-5 font-semibold">Employee</th>
+                                                        <th className="py-3 px-5 font-semibold">Amount</th>
+                                                        <th className="py-3 px-5 font-semibold">Status</th>
+                                                        <th className="py-3 px-5 font-semibold"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {visiblePayroll.map(p => (
+                                                        <tr key={p.id} className="border-t border-[#ECEAF0] dark:border-[#35333A]">
+                                                            <td className="py-3 px-5 text-[#1D1B20] dark:text-[#E6E1E9] font-medium">{p.employee}</td>
+                                                            <td className="py-3 px-5 text-[#49454F] dark:text-[#A9A5B0]">${p.amount.toLocaleString()}</td>
+                                                            <td className="py-3 px-5"><StatusPill status={p.status} /></td>
+                                                            <td className="py-3 px-5">
+                                                                <button onClick={() => printPayslip(p)} className="text-[#0B57D0] dark:text-[#7BC0FF] hover:underline text-sm flex items-center gap-1">
+                                                                    <Printer size={14} /> PDF
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── PERFORMANCE ───────────────────────────────────── */}
+                            {active === "performance" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('performance')}</h2>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {performance.map(p => (
+                                            <div key={p.id} className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5 flex items-center justify-between">
+                                                <div>
+                                                    <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{p.employee}</p>
+                                                    <p className="text-sm text-[#79747E] dark:text-[#88849A]">{p.period}</p>
+                                                </div>
+                                                <div className="flex items-center gap-1.5 text-amber-500 dark:text-amber-400 font-bold text-lg">
+                                                    <Award size={18} /> {p.score}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── ANNOUNCEMENTS ────────────────────────────────── */}
+                            {active === "announcements" && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                                        <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('announcements')}</h2>
+                                        {(isAdmin || isManager) && (
+                                            <button onClick={() => { setNewAnnouncement({ title: "", content: "", department: isManager ? userDept : "All" }); setShowAddAnnouncement(true); }} className="bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white text-sm font-semibold rounded-full px-4 py-2 flex items-center gap-1.5">
+                                                <Megaphone size={16} /> New Announcement
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="space-y-3">
+                                        {visibleAnnouncements.map(a => (
+                                            <div key={a.id} className={`bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border ${a.pinned ? 'border-[#0B57D0] dark:border-[#1A5A9A]' : 'border-[#E3E1E6] dark:border-[#3D3B43]'} p-5`}>
+                                                <div className="flex items-start justify-between">
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2 flex-wrap">
+                                                            {a.pinned && <span className="text-xs font-medium text-[#0B57D0] dark:text-[#7BC0FF]">📌 PINNED</span>}
+                                                            <span className="text-xs text-[#79747E] dark:text-[#88849A]">{a.date}</span>
+                                                            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#ECE6F0] dark:bg-[#35333A] text-[#49454F] dark:text-[#A9A5B0]">
+                                                                {(!a.department || a.department === 'All') ? '🌐 All Employees' : `🏢 ${a.department}`}
+                                                            </span>
+                                                        </div>
+                                                        <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] text-lg mt-1">{a.title}</h3>
+                                                        <p className="text-[#49454F] dark:text-[#A9A5B0] text-sm mt-1">{a.content}</p>
+                                                    </div>
+                                                    {(isAdmin || (isManager && a.department === userDept)) && (
+                                                        <div className="flex gap-2 ml-4">
+                                                            <button onClick={() => togglePin(a.id)} className="text-[#79747E] dark:text-[#88849A] hover:text-[#0B57D0] dark:hover:text-[#7BC0FF]">
+                                                                {a.pinned ? <Check size={16} /> : <Plus size={16} />}
+                                                            </button>
+                                                            <button onClick={() => deleteAnnouncement(a.id)} className="text-[#79747E] dark:text-[#88849A] hover:text-rose-600 dark:hover:text-rose-400">
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {visibleAnnouncements.length === 0 && <p className="text-[#79747E] dark:text-[#88849A]">No announcements yet</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ─── ANALYTICS ────────────────────────────────────── */}
+                            {active === "analytics" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('analytics')}</h2>
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] mb-4 g-title">Headcount by Department</h3>
+                                            <div className="space-y-3">
+                                                {deptStats.map(d => (
+                                                    <div key={d.name}>
+                                                        <div className="flex justify-between text-sm mb-1">
+                                                            <span className="text-[#49454F] dark:text-[#A9A5B0]">{d.name}</span>
+                                                            <span className="text-[#1D1B20] dark:text-[#E6E1E9] font-medium">{d.count}</span>
+                                                        </div>
+                                                        <div className="w-full h-2 bg-[#ECEAF0] dark:bg-[#3D3B43] rounded-full overflow-hidden">
+                                                            <div className="chart-bar h-full rounded-full bg-[#0B57D0] dark:bg-[#1A5A9A]" style={{ width: `${(d.count / maxDeptCount) * 100}%` }} />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] mb-4 g-title">Leave Summary</h3>
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-[#49454F] dark:text-[#A9A5B0]">Pending</span>
+                                                    <span className="text-amber-500 font-medium">{leaveStats.pending}</span>
+                                                </div>
+                                                <div className="w-full h-2 bg-[#ECEAF0] dark:bg-[#3D3B43] rounded-full overflow-hidden">
+                                                    <div className="h-full rounded-full bg-amber-500" style={{ width: `${(leaveStats.pending / Math.max(leaveStats.pending + leaveStats.approved, 1)) * 100}%` }} />
+                                                </div>
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-[#49454F] dark:text-[#A9A5B0]">Approved</span>
+                                                    <span className="text-emerald-500 font-medium">{leaveStats.approved}</span>
+                                                </div>
+                                                <div className="w-full h-2 bg-[#ECEAF0] dark:bg-[#3D3B43] rounded-full overflow-hidden">
+                                                    <div className="h-full rounded-full bg-emerald-500" style={{ width: `${(leaveStats.approved / Math.max(leaveStats.pending + leaveStats.approved, 1)) * 100}%` }} />
+                                                </div>
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-[#49454F] dark:text-[#A9A5B0]">Turnover Rate</span>
+                                                    <span className="text-[#1D1B20] dark:text-[#E6E1E9] font-medium">{turnoverRate}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-6 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                        <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] mb-4 g-title flex items-center gap-2">
+                                            <Trophy size={18} className="text-amber-500" /> {t('leaderboard')}
+                                        </h3>
+                                        <div className="space-y-2">
+                                            {leaderboard.map((emp, idx) => (
+                                                <div key={emp.id} className="flex items-center justify-between bg-[#F3F1F7] dark:bg-[#35333A] rounded-full px-4 py-2">
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-sm font-bold text-[#49454F] dark:text-[#A9A5B0] w-6">#{idx + 1}</span>
+                                                        <div className={`w-6 h-6 rounded-full ${emp.color} text-white flex items-center justify-center text-xs font-bold`}>
+                                                            {emp.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                                                        </div>
+                                                        <span className="text-sm font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{emp.name}</span>
+                                                    </div>
+                                                    <span className="text-sm font-bold text-amber-500">{emp.points || 0} pts</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* ─── MODALS ────────────────────────────────────────────────────── */}
+                    {showAddEmp && (
+                        <Modal title={t('addEmployee')} onClose={() => setShowAddEmp(false)}>
+                            <div className="space-y-3">
+                                <input value={newEmp.name} onChange={e => setNewEmp({ ...newEmp, name: e.target.value })} placeholder="Full name" className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                                <input value={newEmp.email} onChange={e => setNewEmp({ ...newEmp, email: e.target.value })} placeholder="Email address" className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                                <input value={newEmp.jobTitle} onChange={e => setNewEmp({ ...newEmp, jobTitle: e.target.value })} placeholder="Job title" className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+
+                                {/* Role can only be set by Admins (HR). Managers never see or change this. */}
+                                {isAdmin && (
+                                    <div>
+                                        <label className="block text-xs font-medium text-[#79747E] dark:text-[#88849A] mb-1 ml-1">System Role</label>
+                                        <select value={newEmp.role} onChange={e => setNewEmp({ ...newEmp, role: e.target.value })} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]">
+                                            <option value="employee">Employee</option>
+                                            <option value="manager">Manager</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                )}
+
+                                {isManager ? (
+                                    <div>
+                                        <label className="block text-xs font-medium text-[#79747E] dark:text-[#88849A] mb-1 ml-1">Department (locked to your team)</label>
+                                        <div className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm text-[#938F99] dark:text-[#88849A] cursor-not-allowed">
+                                            {userDept}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <select value={newEmp.department} onChange={e => setNewEmp({ ...newEmp, department: e.target.value })} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]">
+                                        {DEPARTMENTS.map(d => <option key={d}>{d}</option>)}
+                                    </select>
+                                )}
+                                <button onClick={addEmployee} className="w-full bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-semibold rounded-full py-2.5">{t('addEmployee')}</button>
+                            </div>
+                        </Modal>
+                    )}
+
+                    {showAddJob && (
+                        <Modal title={t('postJob')} onClose={() => setShowAddJob(false)}>
+                            <div className="space-y-3">
+                                <input value={newJob.title} onChange={e => setNewJob({ ...newJob, title: e.target.value })} placeholder="Job title" className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                                <select value={newJob.department} onChange={e => setNewJob({ ...newJob, department: e.target.value })} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]">
+                                    {DEPARTMENTS.map(d => <option key={d}>{d}</option>)}
+                                </select>
+                                <button onClick={addJob} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-full py-2.5">{t('postJob')}</button>
+                            </div>
+                        </Modal>
+                    )}
+
+                    {showAddAnnouncement && (
+                        <Modal title="New Announcement" onClose={() => setShowAddAnnouncement(false)}>
+                            <div className="space-y-3">
+                                <input value={newAnnouncement.title} onChange={e => setNewAnnouncement({ ...newAnnouncement, title: e.target.value })} placeholder="Announcement title" className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                                <textarea value={newAnnouncement.content} onChange={e => setNewAnnouncement({ ...newAnnouncement, content: e.target.value })} placeholder="Announcement content..." rows={3} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-[20px] px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9] resize-none" />
+
+                                {/* Managers can only announce to their own team — locked. Admins can target any department or All. */}
+                                {isManager ? (
+                                    <div>
+                                        <label className="block text-xs font-medium text-[#79747E] dark:text-[#88849A] mb-1 ml-1">Audience (locked to your team)</label>
+                                        <div className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm text-[#938F99] dark:text-[#88849A] cursor-not-allowed flex items-center gap-2">
+                                            🏢 {userDept} team only
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <label className="block text-xs font-medium text-[#79747E] dark:text-[#88849A] mb-1 ml-1">Audience</label>
+                                        <select value={newAnnouncement.department} onChange={e => setNewAnnouncement({ ...newAnnouncement, department: e.target.value })} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]">
+                                            <option value="All">🌐 All Employees</option>
+                                            {DEPARTMENTS.map(d => <option key={d} value={d}>🏢 {d}</option>)}
+                                        </select>
+                                    </div>
+                                )}
+                                <button onClick={addAnnouncement} className="w-full bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-semibold rounded-full py-2.5">Post Announcement</button>
+                            </div>
+                        </Modal>
+                    )}
+
+                    {showEmpDetail && (
+                        <Modal title="Employee Details" onClose={() => setShowEmpDetail(null)} maxW="max-w-lg">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <div className={`w-16 h-16 rounded-full ${showEmpDetail.color} text-white flex items-center justify-center text-2xl font-bold`}>
+                                        {showEmpDetail.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{showEmpDetail.name}</h3>
+                                        <p className="text-[#49454F] dark:text-[#A9A5B0]">{showEmpDetail.jobTitle ? `${showEmpDetail.jobTitle} · ` : ''}<span className="capitalize">{showEmpDetail.role}</span> · {showEmpDetail.department}</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="bg-[#F3F1F7] dark:bg-[#35333A] rounded-[20px] p-3">
+                                        <p className="text-xs text-[#79747E] dark:text-[#88849A]">Email</p>
+                                        <p className="text-sm font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{showEmpDetail.email}</p>
+                                    </div>
+                                    <div className="bg-[#F3F1F7] dark:bg-[#35333A] rounded-[20px] p-3">
+                                        <p className="text-xs text-[#79747E] dark:text-[#88849A]">Status</p>
+                                        <StatusPill status={showEmpDetail.status} />
+                                    </div>
+                                    <div className="bg-[#F3F1F7] dark:bg-[#35333A] rounded-[20px] p-3">
+                                        <p className="text-xs text-[#79747E] dark:text-[#88849A]">Points</p>
+                                        <p className="text-sm font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{showEmpDetail.points || 0}</p>
+                                    </div>
+                                    <div className="bg-[#F3F1F7] dark:bg-[#35333A] rounded-[20px] p-3">
+                                        <p className="text-xs text-[#79747E] dark:text-[#88849A]">Joined</p>
+                                        <p className="text-sm font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{showEmpDetail.joined}</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setShowEmpDetail(null)} className="w-full bg-[#ECEAF0] dark:bg-[#3D3B43] text-[#1D1B20] dark:text-[#E6E1E9] font-medium rounded-full py-2.5">Close</button>
+                            </div>
+                        </Modal>
+                    )}
+                </div>
+                </>
+            );
+        }
+
+        // ─── Employee App ──────────────────────────────────────────────────────────
+
+        function EmployeeApp({ onLogout, user }) {
+            const { state, dispatch } = useApp();
+            const [active, setActive] = useState("dashboard");
+            const [showWelcome, setShowWelcome] = useState(true);
+            const [leaves, setLeaves] = useState([
+                { id: 1, type: "Sick", from: "2026-08-19", to: "2026-08-20", days: 2, status: "Approved" },
+                { id: 2, type: "Vacation", from: "2026-09-21", to: "2026-09-22", days: 2, status: "Approved" },
+            ]);
+            const [pendingLeaves, setPendingLeaves] = useState(0);
+            const [showRequest, setShowRequest] = useState(false);
+            const [form, setForm] = useState({ type: "Vacation", from: "", to: "" });
+            const [week, setWeek] = useState([
+                { day: "Mon", status: "Present" },
+                { day: "Tue", status: "Present" },
+                { day: "Wed", status: "Absent" },
+                { day: "Thu", status: "Present" },
+                { day: "Fri", status: "Not marked" },
+                { day: "Sat", status: "Weekend" },
+                { day: "Sun", status: "Weekend" },
+            ]);
+            const [checkedIn, setCheckedIn] = useState(false);
+            const [documents, setDocuments] = useState([
+                { id: 1, name: "Employment Contract.pdf", date: "2026-06-10" },
+                { id: 2, name: "ID Verification.pdf", date: "2026-06-11" },
+                { id: 3, name: "NDA Agreement.pdf", date: "2026-06-12" },
+            ]);
+            const [payslips] = useState([
+                { id: 1, month: "July 2026", amount: 1200 },
+                { id: 2, month: "June 2026", amount: 1200 },
+                { id: 3, month: "May 2026", amount: 1150 },
+                { id: 4, month: "April 2026", amount: 1150 },
+            ]);
+            const [profile, setProfile] = useState({
+                name: user.name,
+                role: user.role,
+                department: user.department,
+                email: user.email,
+                phone: "+60 12-345 6789",
+            });
+            const [collapsed, setCollapsed] = useState(false);
+            const [showDocPreview, setShowDocPreview] = useState(null);
+            const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
+            const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+            const addToast = useToast();
+            const { dark, toggle } = useTheme();
+
+            const t = (key) => TRANSLATIONS[state.language][key] || key;
+
+            const items = [
+                { key: "dashboard", label: t('dashboard'), icon: LayoutGrid },
+                { key: "profile", label: t('myProfile'), icon: User },
+                { key: "attendance", label: t('attendance'), icon: Clock },
+                { key: "leave", label: t('leaveRequests'), icon: Calendar },
+                { key: "payslips", label: t('payslips'), icon: FileText },
+                { key: "documents", label: t('documents'), icon: Upload },
+                { key: "announcements", label: t('announcements'), icon: Megaphone },
+                { key: "leaderboard", label: t('leaderboard'), icon: Trophy },
+            ];
+
+            const presentCount = week.filter(d => d.status === "Present").length;
+
+            const addNotification = (msg, type = 'info') => {
+                dispatch({ type: 'ADD_NOTIFICATION', payload: { id: Date.now(), message: msg, type, read: false, date: new Date().toISOString(), link: null } });
+            };
+
+            const sendEmail = (to, subject, body) => {
+                addToast(`📧 Email sent to ${to}: ${subject}`, 'success');
+            };
+
+            const awardPoints = (userId, points, reason) => {
+                const emp = state.employees.find(e => e.id === userId);
+                if (emp) {
+                    const updated = state.employees.map(e => e.id === userId ? { ...e, points: (e.points || 0) + points } : e);
+                    dispatch({ type: 'SET_EMPLOYEES', payload: updated });
+                    addNotification(`You earned ${points} points for ${reason}!`, 'success');
+                    addToast(`🏆 +${points} points!`, 'success');
+                }
+            };
+
+            const submitLeave = () => {
+                if (!form.from || !form.to) { addToast("Please select dates", 'error'); return; }
+                const days = Math.max(1, (new Date(form.to) - new Date(form.from)) / 86400000 + 1);
+                const newLeave = { id: Date.now(), employeeId: user.id, employee: user.name, type: form.type, from: form.from, to: form.to, days, status: "Pending" };
+                // Add to global leave requests
+                const updated = [...state.leaveRequests, newLeave];
+                dispatch({ type: 'SET_LEAVE_REQUESTS', payload: updated });
+                setLeaves(l => [{ id: Date.now(), type: form.type, from: form.from, to: form.to, days, status: "Pending" }, ...l]);
+                setPendingLeaves(p => p + 1);
+                setForm({ type: "Vacation", from: "", to: "" });
+                setShowRequest(false);
+                addToast("📅 Leave request submitted", 'success');
+                addNotification("Leave request submitted for approval.", 'info');
+                sendEmail("manager@peoplehub.com", "Leave Request", `${user.name} requested ${form.type} leave from ${form.from} to ${form.to}.`);
+            };
+
+            const checkIn = () => {
+                const now = new Date();
+                const isEarly = now.getHours() < 9;
+                setCheckedIn(true);
+                setWeek(w => w.map((d, i) => i === 4 ? { ...d, status: "Present" } : d));
+                addToast("✅ Checked in successfully", 'success');
+                if (isEarly) {
+                    awardPoints(user.id, 5, "Early check-in (before 9 AM)");
+                } else {
+                    awardPoints(user.id, 1, "Check-in");
+                }
+            };
+
+            // Employees only see announcements that are global ("All") or targeted at their own department
+            const visibleAnnouncements = state.announcements.filter(a => !a.department || a.department === 'All' || a.department === user.department);
+            const sortedAnnouncements = [...visibleAnnouncements].sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                return new Date(b.date) - new Date(a.date);
+            });
+            const recentAnnouncements = sortedAnnouncements.slice(0, 3);
+
+            const leaderboard = [...state.employees].sort((a, b) => (b.points || 0) - (a.points || 0)).slice(0, 10);
+
+            const printPayslip = (payslip) => {
+                const printWindow = window.open('', '_blank', 'width=600,height=400');
+                if (printWindow) {
+                    printWindow.document.write(`
+                        <html><head><title>Payslip ${payslip.month}</title>
+                        <style>body { font-family: Roboto, sans-serif; padding: 2rem; } .container { max-width: 400px; margin: auto; border: 1px solid #ccc; padding: 2rem; border-radius: 8px; } .header { text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 1rem; } .row { display: flex; justify-content: space-between; padding: 0.5rem 0; } .label { font-weight: 600; } .total { border-top: 2px solid #000; padding-top: 0.5rem; margin-top: 0.5rem; }</style>
+                        </head><body>
+                        <div class="container">
+                            <div class="header"><h2>PeopleHub HRMS</h2><p>Payslip for ${payslip.month}</p></div>
+                            <div class="row"><span class="label">Employee:</span><span>${payslip.employee}</span></div>
+                            <div class="row"><span class="label">Amount:</span><span>$${payslip.amount.toLocaleString()}</span></div>
+                            <div class="row total"><span class="label">Net Pay:</span><span>$${payslip.amount.toLocaleString()}</span></div>
+                        </div>
+                        </body></html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.print();
+                }
+            };
+
+            // Calendar for employee
+            const getDaysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
+            const getFirstDay = (month, year) => new Date(year, month, 1).getDay();
+
+            const renderCalendar = () => {
+                const days = getDaysInMonth(calendarMonth, calendarYear);
+                const firstDay = getFirstDay(calendarMonth, calendarYear);
+                const today = new Date();
+                const isToday = (d) => today.getDate() === d && today.getMonth() === calendarMonth && today.getFullYear() === calendarYear;
+
+                const leavesOnDate = (d) => {
+                    const dateStr = `${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    return state.leaveRequests.filter(l => l.employeeId === user.id && l.from <= dateStr && l.to >= dateStr);
+                };
+
+                let rows = [];
+                let cells = [];
+                for (let i = 0; i < firstDay; i++) {
+                    cells.push(<div key={`empty-${i}`} className="h-8 w-8"></div>);
+                }
+                for (let d = 1; d <= days; d++) {
+                    const le = leavesOnDate(d);
+                    const hasLeave = le.length > 0;
+                    const isPending = le.some(l => l.status === 'Pending');
+                    const isApproved = le.some(l => l.status === 'Approved');
+                    cells.push(
+                        <div key={d} className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium relative ${isToday(d) ? 'ring-2 ring-[#0B57D0]' : ''} ${hasLeave ? (isPending ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300') : 'text-[#1D1B20] dark:text-[#E6E1E9]'}`}>
+                            {d}
+                            {hasLeave && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#0B57D0] dark:bg-[#7BC0FF]"></span>}
+                        </div>
+                    );
+                    if ((firstDay + d) % 7 === 0 || d === days) {
+                        rows.push(<div key={`row-${d}`} className="flex gap-1 justify-between">{cells}</div>);
+                        cells = [];
+                    }
+                }
+                return rows;
+            };
+
+            return (
+                <>
+                    {showWelcome && (
+                        <WelcomeOverlay
+                            name={`Welcome, ${profile.name.split(" ")[0]}!`}
+                            subtitle={`${profile.role} • ${profile.department}`}
+                            initials={profile.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                            avatarColor="bg-fuchsia-500"
+                            gradient="from-fuchsia-600 via-pink-500 to-rose-500"
+                            onDismiss={() => setShowWelcome(false)}
+                        />
+                    )}
+                <div className="flex h-screen bg-[#F3F1F7] dark:bg-[#1C1B1F] font-sans">
+                    <Sidebar
+                        title="Employee Portal"
+                        icon={Users}
+                        items={items}
+                        active={active}
+                        setActive={setActive}
+                        onLogout={onLogout}
+                        collapsed={collapsed}
+                        setCollapsed={setCollapsed}
+                        subtitle={
+                            <div className="flex items-center gap-3 px-5 py-4">
+                                <div className="w-10 h-10 rounded-full bg-fuchsia-500 dark:bg-fuchsia-700 text-white flex items-center justify-center font-bold text-sm">
+                                    {profile.name.split(" ").map(n => n[0]).join("")}
+                                </div>
+                                {!collapsed && (
+                                    <div>
+                                        <p className="font-semibold text-[#1D1B20] dark:text-[#E6E1E9] text-sm leading-tight">{profile.name}</p>
+                                        <p className="text-xs text-[#938F99] dark:text-[#88849A]">{profile.role}</p>
+                                    </div>
+                                )}
+                            </div>
+                        }
+                    />
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                        <TopBar title="Employee Self-Service" name={profile.name} email={profile.email} avatarColor="bg-fuchsia-500" onToggleTheme={toggle} dark={dark} />
+                        <div className="flex-1 overflow-y-auto p-8">
+                            {active === "dashboard" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('welcome')}, {profile.name.split(" ")[0]}!</h2>
+                                    <p className="text-[#79747E] dark:text-[#88849A] mb-6">{profile.role} • {profile.department}</p>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                                        <StatCard label="Attendance (7 days)" value={`${presentCount}/7`} icon={Clock} color="bg-emerald-500" subtitle={`${Math.round(presentCount/7*100)}%`} />
+                                        <StatCard label="Pending Leaves" value={state.leaveRequests.filter(l => l.employeeId === user.id && l.status === 'Pending').length} icon={Calendar} color="bg-orange-500" />
+                                        <StatCard label="Upcoming Leaves" value={state.leaveRequests.filter(l => l.employeeId === user.id && l.status === 'Approved').length} icon={FileText} color="bg-blue-500" />
+                                        <StatCard label="Points" value={user.points || 0} icon={Trophy} color="bg-amber-500" />
+                                    </div>
+
+                                    {visibleAnnouncements.length > 0 && (
+                                        <div className="mb-6 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <Megaphone size={18} className="text-[#0B57D0] dark:text-[#7BC0FF]" />
+                                                <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('announcements')}</h3>
+                                            </div>
+                                            <div className="space-y-2">
+                                                {recentAnnouncements.map(a => (
+                                                    <div key={a.id} className="flex items-start gap-3 text-sm">
+                                                        {a.pinned && <span className="text-xs font-medium text-[#0B57D0] dark:text-[#7BC0FF]">📌</span>}
+                                                        <div>
+                                                            <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{a.title}</p>
+                                                            <p className="text-[#49454F] dark:text-[#A9A5B0] text-xs line-clamp-2">{a.content}</p>
+                                                            <span className="text-xs text-[#79747E] dark:text-[#88849A]">{a.date}</span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                {visibleAnnouncements.length > 3 && (
+                                                    <button onClick={() => setActive("announcements")} className="text-[#0B57D0] dark:text-[#7BC0FF] text-sm font-medium">
+                                                        {t('viewAll')}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                        <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] mb-4 g-title">{t('upcomingLeaves') || "Upcoming Leaves"}</h3>
+                                            <div className="space-y-3 max-h-48 overflow-y-auto">
+                                                {state.leaveRequests.filter(l => l.employeeId === user.id && l.status === "Approved").slice(0, 4).map(l => (
+                                                    <div key={l.id} className="flex items-center justify-between bg-[#F3F1F7] dark:bg-[#35333A] rounded-[28px] px-4 py-3">
+                                                        <div>
+                                                            <p className="font-semibold text-[#1D1B20] dark:text-[#E6E1E9]">{l.type}</p>
+                                                            <p className="text-xs text-[#79747E] dark:text-[#88849A]">{l.from} to {l.to} ({l.days} days)</p>
+                                                        </div>
+                                                        <StatusPill status="Approved" />
+                                                    </div>
+                                                ))}
+                                                {state.leaveRequests.filter(l => l.employeeId === user.id && l.status === "Approved").length === 0 && <p className="text-[#79747E] dark:text-[#88849A] text-sm">No upcoming leaves</p>}
+                                            </div>
+                                        </div>
+                                        <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] mb-4 g-title">{t('quickActions') || "Quick Actions"}</h3>
+                                            <div className="space-y-3">
+                                                <button onClick={() => setShowRequest(true)} className="w-full bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-semibold rounded-full py-2.5 text-sm">
+                                                    {t('requestLeave')}
+                                                </button>
+                                                <button onClick={checkIn} disabled={checkedIn} className={`w-full font-semibold rounded-full py-2.5 text-sm ${checkedIn ? "bg-[#E3E1E6] dark:bg-[#3D3B43] text-[#79747E] dark:text-[#88849A]" : "bg-emerald-600 hover:bg-emerald-700 text-white"}`}>
+                                                    {checkedIn ? "✅ " + t('checkInToday') : t('checkIn')}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {active === "profile" && (
+                                <div className="max-w-xl">
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('myProfile')}</h2>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6 space-y-4">
+                                        {[
+                                            ["name", "Full name"],
+                                            ["role", "Job title"],
+                                            ["department", "Department"],
+                                            ["email", "Email"],
+                                            ["phone", "Phone"],
+                                        ].map(([key, label]) => (
+                                            <div key={key}>
+                                                <label className="text-sm font-semibold text-[#49454F] dark:text-[#A9A5B0]">{label}</label>
+                                                <input
+                                                    value={profile[key]}
+                                                    onChange={e => setProfile({ ...profile, [key]: e.target.value })}
+                                                    className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]"
+                                                />
+                                            </div>
+                                        ))}
+                                        <button onClick={() => { addToast("✅ Profile updated successfully", 'success');
+                                            addNotification("Profile updated.", 'success'); }} className="w-full bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-semibold rounded-full py-2.5">
+                                            {t('saveChanges')}
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {active === "attendance" && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                                        <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('attendance')}</h2>
+                                        <button onClick={checkIn} disabled={checkedIn} className={`text-sm font-semibold rounded-full px-4 py-2 flex items-center gap-1.5 ${checkedIn ? "bg-[#E3E1E6] dark:bg-[#3D3B43] text-[#79747E] dark:text-[#88849A]" : "bg-emerald-600 hover:bg-emerald-700 text-white"}`}>
+                                            <CalendarDays size={16} /> {checkedIn ? t('checkInToday') : t('checkIn')}
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-7 gap-3">
+                                        {week.map(d => (
+                                            <div key={d.day} className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-4 text-center">
+                                                <p className="text-sm font-semibold text-[#49454F] dark:text-[#A9A5B0] mb-2">{d.day}</p>
+                                                <StatusPill status={d.status} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="mt-4 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                        <div className="flex justify-between text-sm mb-2">
+                                            <span className="text-[#49454F] dark:text-[#A9A5B0]">Weekly Attendance</span>
+                                            <span className="text-[#1D1B20] dark:text-[#E6E1E9] font-medium">{presentCount}/5 work days</span>
+                                        </div>
+                                        <div className="w-full h-2 bg-[#ECEAF0] dark:bg-[#3D3B43] rounded-full overflow-hidden">
+                                            <div className="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full transition-all duration-700" style={{ width: `${(presentCount / 5) * 100}%` }} />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {active === "leave" && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                                        <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('leaveRequests')}</h2>
+                                        <button onClick={() => setShowRequest(true)} className="bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white text-sm font-semibold rounded-full px-4 py-2 flex items-center gap-1.5">
+                                            <PlusCircle size={16} /> {t('requestLeave')}
+                                        </button>
+                                    </div>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] divide-y divide-[#ECEAF0] dark:divide-[#35333A]">
+                                        {state.leaveRequests.filter(l => l.employeeId === user.id).map(l => (
+                                            <div key={l.id} className="flex items-center justify-between px-5 py-4">
+                                                <div>
+                                                    <p className="font-semibold text-[#1D1B20] dark:text-[#E6E1E9]">{l.type}</p>
+                                                    <p className="text-xs text-[#79747E] dark:text-[#88849A]">{l.from} → {l.to} ({l.days} days)</p>
+                                                </div>
+                                                <StatusPill status={l.status} />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Calendar */}
+                                    <div className="mt-6 bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-5">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('calendar')}</h3>
+                                            <div className="flex gap-2">
+                                                <button onClick={() => { if (calendarMonth === 0) { setCalendarMonth(11);
+                                                        setCalendarYear(calendarYear - 1); } else setCalendarMonth(calendarMonth - 1); }} className="p-1 rounded-full hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43]">
+                                                    <ChevronLeft size={20} />
+                                                </button>
+                                                <span className="text-sm font-medium">{new Date(calendarYear, calendarMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
+                                                <button onClick={() => { if (calendarMonth === 11) { setCalendarMonth(0);
+                                                        setCalendarYear(calendarYear + 1); } else setCalendarMonth(calendarMonth + 1); }} className="p-1 rounded-full hover:bg-[#ECE6F0] dark:hover:bg-[#3D3B43]">
+                                                    <ChevronRight size={20} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-[#79747E] dark:text-[#88849A] mb-2">
+                                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                                        </div>
+                                        <div className="space-y-1">
+                                            {renderCalendar()}
+                                        </div>
+                                        <div className="flex gap-4 mt-4 text-xs">
+                                            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-emerald-100 dark:bg-emerald-900/40"></span> Approved</span>
+                                            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-amber-100 dark:bg-amber-900/40"></span> Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {active === "payslips" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('payslips')}</h2>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] divide-y divide-[#ECEAF0] dark:divide-[#35333A]">
+                                        {payslips.map(p => (
+                                            <div key={p.id} className="flex items-center justify-between px-5 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <FileText size={18} className="text-[#0B57D0] dark:text-[#7BC0FF]" />
+                                                    <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{p.month}</p>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <p className="font-semibold text-[#49454F] dark:text-[#A9A5B0]">${p.amount.toLocaleString()}</p>
+                                                    <button onClick={() => printPayslip(p)} className="text-[#0B57D0] dark:text-[#7BC0FF] hover:underline text-sm flex items-center gap-1">
+                                                        <Printer size={14} /> PDF
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {active === "documents" && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                                        <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title">{t('documents')}</h2>
+                                        <button onClick={() => {
+                                            setDocuments(d => [{ id: Date.now(), name: `New Document ${d.length + 1}.pdf`, date: new Date().toISOString().slice(0, 10) }, ...d]);
+                                            addToast("📄 Document uploaded", 'success');
+                                            addNotification("Document uploaded.", 'success');
+                                        }} className="bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white text-sm font-semibold rounded-full px-4 py-2 flex items-center gap-1.5">
+                                            <Upload size={16} /> Upload
+                                        </button>
+                                    </div>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] divide-y divide-[#ECEAF0] dark:divide-[#35333A]">
+                                        {documents.map(d => (
+                                            <div key={d.id} className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#F3F1F7] dark:hover:bg-[#35333A]" onClick={() => setShowDocPreview(d)}>
+                                                <div className="flex items-center gap-3">
+                                                    <FileText size={18} className="text-[#938F99] dark:text-[#88849A]" />
+                                                    <p className="font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{d.name}</p>
+                                                </div>
+                                                <p className="text-xs text-[#938F99] dark:text-[#88849A]">{d.date}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {active === "announcements" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('announcements')}</h2>
+                                    <div className="space-y-3">
+                                        {sortedAnnouncements.map(a => (
+                                            <div key={a.id} className={`bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border ${a.pinned ? 'border-[#0B57D0] dark:border-[#1A5A9A]' : 'border-[#E3E1E6] dark:border-[#3D3B43]'} p-5`}>
+                                                <div className="flex items-start gap-2 flex-wrap">
+                                                    {a.pinned && <span className="text-xs font-medium text-[#0B57D0] dark:text-[#7BC0FF]">📌 PINNED</span>}
+                                                    <span className="text-xs text-[#79747E] dark:text-[#88849A]">{a.date}</span>
+                                                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#ECE6F0] dark:bg-[#35333A] text-[#49454F] dark:text-[#A9A5B0]">
+                                                        {(!a.department || a.department === 'All') ? '🌐 All Employees' : `🏢 ${a.department}`}
+                                                    </span>
+                                                </div>
+                                                <h3 className="font-medium text-[#1D1B20] dark:text-[#E6E1E9] text-lg mt-1">{a.title}</h3>
+                                                <p className="text-[#49454F] dark:text-[#A9A5B0] text-sm mt-1">{a.content}</p>
+                                            </div>
+                                        ))}
+                                        {visibleAnnouncements.length === 0 && <p className="text-[#79747E] dark:text-[#88849A]">{t('noData')}</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {active === "leaderboard" && (
+                                <div>
+                                    <h2 className="text-[26px] font-medium text-[#1D1B20] dark:text-[#E6E1E9] g-title mb-5">{t('leaderboard')}</h2>
+                                    <div className="bg-[#FFFBFE] dark:bg-[#2C2A30] rounded-[28px] border border-[#E3E1E6] dark:border-[#3D3B43] p-6">
+                                        <div className="space-y-2">
+                                            {leaderboard.map((emp, idx) => (
+                                                <div key={emp.id} className={`flex items-center justify-between rounded-full px-4 py-2 ${emp.id === user.id ? 'bg-[#D3E3FD] dark:bg-[#1A3A6A]' : 'bg-[#F3F1F7] dark:bg-[#35333A]'}`}>
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-sm font-bold text-[#49454F] dark:text-[#A9A5B0] w-6">#{idx + 1}</span>
+                                                        <div className={`w-6 h-6 rounded-full ${emp.color} text-white flex items-center justify-center text-xs font-bold`}>
+                                                            {emp.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                                                        </div>
+                                                        <span className="text-sm font-medium text-[#1D1B20] dark:text-[#E6E1E9]">{emp.name} {emp.id === user.id && '(You)'}</span>
+                                                    </div>
+                                                    <span className="text-sm font-bold text-amber-500">{emp.points || 0} pts</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {showRequest && (
+                        <Modal title={t('requestLeave')} onClose={() => setShowRequest(false)}>
+                            <div className="space-y-3">
+                                <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]">
+                                    {["Vacation", "Sick", "Personal"].map(t => <option key={t}>{t}</option>)}
+                                </select>
+                                <div className="flex gap-3">
+                                    <div className="flex-1">
+                                        <label className="text-xs text-[#79747E] dark:text-[#88849A]">From</label>
+                                        <input type="date" value={form.from} onChange={e => setForm({ ...form, from: e.target.value })} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="text-xs text-[#79747E] dark:text-[#88849A]">To</label>
+                                        <input type="date" value={form.to} onChange={e => setForm({ ...form, to: e.target.value })} className="w-full bg-[#ECE6F0] dark:bg-[#35333A] rounded-full px-5 py-2.5 text-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0B57D0] dark:focus:ring-[#1A5A9A] text-[#1D1B20] dark:text-[#E6E1E9]" />
+                                    </div>
+                                </div>
+                                <button onClick={submitLeave} className="w-full bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-semibold rounded-full py-2.5">{t('requestLeave')}</button>
+                            </div>
+                        </Modal>
+                    )}
+
+                    {showDocPreview && (
+                        <Modal title={showDocPreview.name} onClose={() => setShowDocPreview(null)} maxW="max-w-2xl">
+                            <div className="bg-[#F3F1F7] dark:bg-[#35333A] rounded-[20px] p-8 text-center">
+                                <FileText size={48} className="mx-auto text-[#0B57D0] dark:text-[#7BC0FF] mb-4" />
+                                <p className="text-[#49454F] dark:text-[#A9A5B0]">{showDocPreview.name}</p>
+                                <p className="text-xs text-[#79747E] dark:text-[#88849A]">Uploaded on {showDocPreview.date}</p>
+                                <button className="mt-4 bg-[#0B57D0] dark:bg-[#1A5A9A] hover:bg-[#0842A0] dark:hover:bg-[#2A6AAA] text-white font-medium rounded-full px-6 py-2 text-sm">
+                                    <Download size={16} className="inline mr-2" /> Download
+                                </button>
+                            </div>
+                        </Modal>
+                    )}
+                </div>
+                </>
+            );
+        }
+
+        // ─── Root ──────────────────────────────────────────────────────────────────
+
+        function PeopleHubHRMS() {
+            const [screen, setScreen] = useState("admin-login");
+            const [user, setUser] = useState(null);
+            const [state, dispatch] = useReducer(appReducer, {
+                ...initialState,
+                ...getInitialData(),
+            });
+
+            const handleAdminLogin = (userData) => {
+                setUser(userData);
+                setScreen("admin-app");
+            };
+
+            const handleEmployeeLogin = (userData) => {
+                setUser(userData);
+                setScreen("employee-app");
+            };
+
+            const handleLogout = () => {
+                setUser(null);
+                setScreen("admin-login");
+            };
+
+            return (
+                <AppContext.Provider value={{ state, dispatch }}>
+                    <ThemeProvider>
+                        <ToastProvider>
+                            {screen === "admin-login" && <AdminLogin onLogin={handleAdminLogin} goEmployee={() => setScreen("employee-login")} />}
+                            {screen === "employee-login" && <EmployeeLogin onLogin={handleEmployeeLogin} goAdmin={() => setScreen("admin-login")} />}
+                            {screen === "admin-app" && <AdminApp onLogout={handleLogout} user={user} />}
+                            {screen === "employee-app" && <EmployeeApp onLogout={handleLogout} user={user} />}
+                        </ToastProvider>
+                    </ThemeProvider>
+                </AppContext.Provider>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<PeopleHubHRMS />);
+    </script>
+</body>
+</html>
